@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "eventId"
       })
       User.belongsTo(models.Membership, {
-        // foreignKey: "userId"
+        foreignKey: "userId"
       })
       User.belongsTo(models.Groupe, {
-        // foreignKey: "organizerId"
+        foreignKey: "organizerId"
       })
     }
   };
