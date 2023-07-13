@@ -20,7 +20,11 @@ module.exports = {
     await queryInterface.addColumn(options, "eventId", {
       type: Sequelize.INTEGER,
       allowNull: false,
-      references: { model: "Events" },
+      references: {
+        model: "Events",
+        key: "id",
+        deferrable: Deferrable.INITIALLY_DEFERRED
+      },
       onDelete: "CASCADE",
       hooks: true
     })

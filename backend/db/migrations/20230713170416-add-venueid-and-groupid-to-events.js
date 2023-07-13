@@ -19,11 +19,19 @@ module.exports = {
      */
     await queryInterface.addColumn(options, "venueId", {
       type: Sequelize.INTEGER,
-      references: { model: "Venues" }
+      references: {
+        model: "Venues",
+        key: "id",
+        deferrable: Deferrable.INITIALLY_DEFERRED
+      }
     })
     await queryInterface.addColumn(options, "groupId", {
       type: Sequelize.INTEGER,
-      references: { model: "Groupes" }
+      references: {
+        model: "Groupes",
+        key: "id",
+        deferrable: Deferrable.INITIALLY_DEFERRED
+      }
     })
   },
 

@@ -19,7 +19,11 @@ module.exports = {
      */
     await queryInterface.addColumn(options, "organizerId", {
       type: Sequelize.INTEGER,
-      references: { model: "Users" }
+      references: {
+        model: "Users",
+        key: "id",
+        deferrable: Deferrable.INITIALLY_DEFERRED
+      }
     })
   },
 
