@@ -15,13 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "organizerId"
       })
       Groupe.belongsTo(models.Venue, {
-        foreignKey: "groupId"
+        // foreignKey: "groupId"
       })
       Groupe.belongsTo(models.Membership, {
-        foreignKey: "groupId"
+        // foreignKey: "groupId"
       })
       Groupe.belongsTo(models.GroupImage, {
-        foreignKey: "groupId"
+        // foreignKey: "groupId"
       })
     }
   }

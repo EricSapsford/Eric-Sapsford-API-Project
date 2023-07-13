@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "userId"
       })
       Event.belongsTo(models.Venue, {
-        foreignKey: "venueId"
+        // foreignKey: "venueId"
       })
       Event.belongsTo(models.Groupe, {
-        foreignKey: "groupId"
+        // foreignKey: "groupId"
       })
     }
   }
