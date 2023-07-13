@@ -9,15 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      eventId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Events",
-          onDelete: "CASCADE",
-          hooks: true
-        }
-      },
       url: {
         type: Sequelize.STRING
       },

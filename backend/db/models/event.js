@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Event.hasMany(models.EventImage, {
-        foreignKey: "id"
+        foreignKey: "eventId"
       })
       Event.belongsToMany(models.User, {
-        through: models.Attendance,
+        through: "Attendances",
         foreignKey: "eventId",
         otherKey: "userId"
       })
@@ -32,7 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    type: DataTypes.ENUM,
+    type: {
+      type: DataTypes.ENUM("Online", "In person"),
+      allowNull: false
+    },
     capacity: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     startDate: DataTypes.DATE,

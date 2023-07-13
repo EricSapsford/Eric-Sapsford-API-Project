@@ -1,24 +1,28 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Attendences', {
+    await queryInterface.createTable('Attendances', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      eventId: {
-        type: Sequelize.INTEGER,
-        references: { model: "Events" }
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        references: { model: "Users" }
-      },
       status: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM,
+        values: [
+          "attending",
+          "waitlist",
+          "pending"
+        ],
+        defaultValue: "pending",
       },
       createdAt: {
         allowNull: false,
@@ -28,9 +32,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    }, options);
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Attendences');
+    options.tableName = "Attendances";
+    await queryInterface.dropTable(options);
   }
 };
