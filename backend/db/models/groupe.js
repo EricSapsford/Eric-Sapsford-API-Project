@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "userId"
       });
       Groupe.belongsToMany(models.Venue, {
-        through: "Events",
+        through: models.Venue,
         foreignKey: "groupId",
         otherKey: "venueId"
       });
