@@ -97,8 +97,7 @@ router.get("/", async (req, res) => {
         [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
       ]
     },
-    //Groupe.id
-    //holy shit this works
+    //Groupe.id <-- you dumb fuck
     group: ["Groupe.id"]
   });
 
