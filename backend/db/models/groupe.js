@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "groupId"
       })
     }
-  }
+  };
+
   Groupe.init({
     organizerId: DataTypes.INTEGER,
     name: DataTypes.STRING,
