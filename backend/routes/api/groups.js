@@ -215,4 +215,102 @@ router.get("/", async (req, res) => {
 
 })
 
+//============================= DELETE REQUESTS =================================
+
+//----------------------------- DELETE A GROUPE ---------------------------------
+//----------------------------- DELETE A GROUPE ---------------------------------
+//----------------------------- DELETE A GROUPE ---------------------------------
+//----------------------------- DELETE A GROUPE ---------------------------------
+
+router.delete("/:groupeId", requireAuth, async (req, res) => {
+
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  const userId = user.dataValues.id;
+  const groupeId = req.params.groupeId;
+
+  const groupe = await Groupe.findByPk(groupeId);
+
+  if (groupe) {
+    if (groupe.organizerId === userId) {
+      await groupe.destroy();
+      res.json({
+        "message": "Successfully deleted",
+      })
+    } else {
+      res.status(403);
+      res.json({
+        "message": "Whoa there buckeroo, that ain't yours"
+      })
+    }
+  } else {
+    res.status(404);
+    res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+})
+
+//============================== POST REQUESTS ==================================
+
+//------------- ADD AN IMAGE TO A GROUPE BASED ON THE GROUPE'S ID ---------------
+//------------- ADD AN IMAGE TO A GROUPE BASED ON THE GROUPE'S ID ---------------
+//------------- ADD AN IMAGE TO A GROUPE BASED ON THE GROUPE'S ID ---------------
+//------------- ADD AN IMAGE TO A GROUPE BASED ON THE GROUPE'S ID ---------------
+
+router.post("/:groupeId/images", requireAuth, async (req, res) => {
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  // console.log(user)
+
+  const userId = user.dataValues.id;
+  const groupeId = req.params.groupeId; // <-- seriously stop destructuring these
+
+  const { url, preview } = req.body;
+
+  let groupe = await Groupe.findByPk(groupeId);
+  console.log(groupeId);
+
+  if (groupe) {
+    if (groupe.organizerId === userId) {
+      if (!preview) preview = false;
+
+      const newImage = await GroupImage.create({
+        groupeId,
+        url,
+        preview
+      });
+
+      res.json({
+        id: newImage.id,
+        url: newImage.url,
+        preivew: newImage.preview
+      });
+    } else {
+      res.status(403)
+      res.json({
+        "message": "That's not yours",
+      });
+    }
+  } else {
+    res.status(404);
+    res.json({
+      "message": "Group couldn't be found"
+    });
+  }
+})
+
+
 module.exports = router;
