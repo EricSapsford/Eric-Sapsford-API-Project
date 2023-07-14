@@ -10,12 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         otherKey: "eventId"
       })
-      User.belongsTo(models.Membership, {
-        foreignKey: "userId"
-      })
-      User.belongsTo(models.Groupe, {
-        foreignKey: "organizerId"
-      })
+      User.belongsTo(models.Membership)
+      User.belongsTo(models.Groupe)
     }
   };
 

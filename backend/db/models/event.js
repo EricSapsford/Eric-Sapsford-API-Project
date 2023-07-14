@@ -19,14 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "eventId",
         otherKey: "userId"
       })
-      Event.belongsTo(models.Venue, {
-        foreignKey: "venueId"
-      })
-      Event.belongsTo(models.Groupe, {
-        foreignKey: "groupId"
-      })
+      Event.belongsTo(models.Venue)
+      Event.belongsTo(models.Groupe)
     }
-  }
+  };
+
   Event.init({
     venueId: DataTypes.INTEGER,
     groupId: DataTypes.INTEGER,
