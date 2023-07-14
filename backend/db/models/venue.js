@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       Venue.hasMany(models.Event, {
         foreignKey: "venueId"
       })
-      Venue.belongsTo(models.Groupe)
+      Venue.belongsTo(models.Groupe, {
+        foreignKey: "groupId"
+      })
     }
-  };
-
+  }
   Venue.init({
     groupId: DataTypes.INTEGER,
     address: DataTypes.STRING,

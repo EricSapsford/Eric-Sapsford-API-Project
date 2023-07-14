@@ -5,13 +5,21 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      console.log("user associations start")
       User.belongsToMany(models.Event, {
         through: "Attendances",
         foreignKey: "userId",
         otherKey: "eventId"
-      })
-      User.belongsTo(models.Membership)
-      User.belongsTo(models.Groupe)
+      });
+      console.log("user associations 1")
+      User.belongsTo(models.Membership, {
+        foreignKey: "userId"
+      });
+      console.log("user associations 2")
+      User.belongsTo(models.Groupe, {
+        foreignKey: "organizerId"
+      });
+      console.log("user associations 3")
     }
   };
 
