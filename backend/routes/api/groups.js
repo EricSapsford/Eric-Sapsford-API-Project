@@ -38,6 +38,7 @@ router.get("/current", requireAuth, async (req, res) => {
         [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
       ]
     },
+    group: ["Groupe.id"]
   })
 
   //copypaste from get all down there
@@ -96,6 +97,9 @@ router.get("/", async (req, res) => {
         [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
       ]
     },
+    //Groupe.id
+    //holy shit this works
+    group: ["Groupe.id"]
   });
 
   // THEY SAY WE LAZY LOAD WE LAZY LOAD
