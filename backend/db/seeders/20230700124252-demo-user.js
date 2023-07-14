@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
     options.tableName = "Users";
+    console.log("hello")
     await User.bulkCreate([
       {
         firstName: "Demo",
