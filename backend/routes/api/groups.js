@@ -42,7 +42,7 @@ router.get("/current", requireAuth, async (req, res) => {
   })
 
   //copypaste from get all down there
-  //------------------------------------------------------------------
+  //_____________________________________________________
   for (let index = 0; index < groupes.length; index++) {
     // let image = await Groupe.findall(
     let image = await Groupe.findByPk(groupes[index].id, {
@@ -64,13 +64,96 @@ router.get("/current", requireAuth, async (req, res) => {
       groupes[index].previewImage = "preview does not exist";
     };
   }
-  //------------------------------------------------------------------
+  //_____________________________________________________
 
   res.json({
     //this will ALWAYS feel wrong
     Groups: groupes
   });
 })
+
+
+
+//------------------ GET DETAILS OF A GROUP FROM AN ID -------------------
+
+router.get("/:groupId", async (req, res) => {
+  const { groupId } = req.params;
+
+  // Groupe base
+  let groupe = await Groupe.findByPk(groupId, {
+    // raw: true;
+    include: [{
+      model: Membership,
+      attributes: [],
+      // where: { <-- because why the fuck would I need this?
+      //   userId: user.id
+      // }
+    }],
+    attributes: {
+      // ^C ^V you sweet sweet succulent siren
+      include: [
+        [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
+      ]
+    },
+    group: ["Groupe.id"]
+  })
+
+  // Error Handler start, gross I know
+  if (groupe) {
+    groupe = groupe.toJSON(); //<-- can't have this outside of the if for reasons
+
+    //Organizer
+    let organizer = await User.findByPk(groupe.organizerId, {
+      attributes: ["id", "firstName", "lastName"]
+    })
+
+    //Venue
+    let venue = await Venue.findAll({
+      attributes: [
+        "id",
+        "groupId",
+        "address",
+        "city",
+        "state",
+        "lat",
+        "lng"
+      ],
+      where: {
+        groupId
+      }
+    })
+
+    //GroupImages
+    let groupImages = await GroupImage.findAll({
+      attributes: [
+        "id",
+        "url",
+        "preview"
+      ],
+      where: {
+        groupId: req.params.groupId
+      }
+    })
+
+    //Compile
+    groupe.GroupImages = groupImages;
+    groupe.Organizer = organizer;
+    groupe.Venues = venue;
+
+
+    // if (groupe) {
+    res.json({
+      ...groupe
+    });
+  } else {
+    res.status(404);
+    res.json({
+      "message": "Groupe couldn't be found"
+    })
+  }
+})
+
+
 
 //--------------------------- GET ALL GROUPES ----------------------------
 
