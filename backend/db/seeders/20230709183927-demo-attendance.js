@@ -28,6 +28,11 @@ module.exports = {
         userId: 3,
         status: "waitlist",
       },
+      {
+        eventId: 1,
+        userId: 4,
+        status: "attending",
+      },
     ], { validate: true });
   },
 

@@ -15,6 +15,90 @@ const router = express.Router();
 
 //============================== GET REQUESTS ==============================
 
+//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
+
+router.get("/:groupId/events", async (req, res) => {
+
+  const groupId = req.params.groupId
+
+  let events = await Event.findAll({
+    where: {
+      groupId,
+    },
+    include: [
+      {
+        model: Attendance,
+        attributes: [],
+      },
+      {
+        model: EventImage,
+        attributes: [],
+      },
+      {
+        model: Groupe,
+        attributes: [
+          "id",
+          "name",
+          "city",
+          "state"
+        ]
+      },
+      {
+        model: Venue,
+        attributes: [
+          "id",
+          "city",
+          "state",
+        ]
+      }
+    ],
+    attributes: {
+      include: [
+        [sequelize.fn("COUNT", sequelize.col("Attendances.eventId")), "numAttending"]
+      ],
+      // previewImage: EventImage.dataValues.url
+    },
+    group: ["Event.id"]
+  })
+
+  if (events.length === 0) {
+    res.status(404)
+    return res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+
+  for (let index = 0; index < events.length; index++) {
+    let image = await Event.findByPk(events[index].id, {
+      raw: true,
+      include: [{
+        model: EventImage,
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
+      }]
+    });
+
+    // console.log("******NEWLINE******", image);
+
+    if (image) {
+      events[index].dataValues.previewImage = image["EventImages.url"];
+    } else {
+      events[index].dataValues.previewImage = "preview does not exist";
+    };
+  }
+
+  console.log("=====EVENTS=====", events)
+
+  res.status(200)
+  return res.json({ Events: events })
+
+});
+
 //------------- GET ALL VENUES FOR A GROUPE SPECIFIED BY ITS ID ------------
 //------------- GET ALL VENUES FOR A GROUPE SPECIFIED BY ITS ID ------------
 //------------- GET ALL VENUES FOR A GROUPE SPECIFIED BY ITS ID ------------
@@ -130,9 +214,6 @@ router.get("/current", requireAuth, async (req, res) => {
     include: [{
       model: Membership,
       attributes: [],
-      where: {
-        userId: user.id
-      }
     }],
     attributes: {
       // ^C ^V you sweet sweet siren

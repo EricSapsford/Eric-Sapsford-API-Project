@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   EventImage.init({
+    id: { // If this isn't here Sequelize just doesn't give us an id
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     eventId: DataTypes.INTEGER,
     url: DataTypes.STRING,
     preview: DataTypes.BOOLEAN
