@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { group } = require("console");
 
 
 const router = express.Router();
@@ -37,6 +38,16 @@ router.get("/:groupId/members", async (req, res) => {
 
   // console.log("organ", members[0].dataValues.Groupe.dataValues.organizerId)
   // console.log("user", userId)
+
+  // JUST IN CASE THIS IS MORE OF A NUCLEAR OPTION
+  // const group = await Groupe.findByPk(groupId);
+
+  // if (!group) {
+  //   res.status(404)
+  //   return res.json({
+  //     "message": "Group couldn't be found"
+  //   })
+  // }
 
 
   if (members.length === 0) {
@@ -608,7 +619,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
     })
   }
 
-  const userId = user.dataValues.id;
+  const currUserId = user.dataValues.id;
   const groupId = req.params.groupId;
   const { memberId } = req.body
 
@@ -621,7 +632,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
     })
   }
 
-  let memUser = await User.findByPk(memberId);
+  let memUser = await Membership.findByPk(memberId);
 
   if (!memUser) {
     res.status(400);
@@ -636,7 +647,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
   let membership = await Membership.findOne({
     where: {
       groupId,
-      userId: memberId
+      id: memberId
     }
   })
 
@@ -647,24 +658,19 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
     })
   }
 
-  let hostOrmem = false;
-  let userMembership = await Membership.findOne({
+  let currUserMembership = await Membership.findOne({
     where: {
-      userId,
-      groupId
+      userId: currUserId,
+      groupId: groupId
     }
   })
 
-  if (!userMembership) {
+  if (!currUserMembership) {
     res.status(404);
     res.json({
-      "message": "I don't think you can see this one"
+      "message": "Whoa there buckeroo, that ain't yours"
     })
-  } else if (userMembership.status === "host" || userMembership.userId === memberId) {
-    hostOrmem = true;
-  }
-
-  if (hostOrmem) {
+  } else if (currUserMembership.status === "host" || membership.userId === currUserId) {
     await membership.destroy();
     res.status(200);
     return res.json({
@@ -1133,8 +1139,15 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
   },
   ], { validate: true })
 
+  let realId = await Membership.findOne({
+    where: {
+      groupId: groupId,
+      userId: userId
+    }
+  })
+
   let newMemberObj = {
-    memberId: userId,
+    memberId: realId.id,
     status: "pending"
   }
 
