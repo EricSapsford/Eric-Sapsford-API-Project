@@ -40,6 +40,20 @@ module.exports = {
         email: 'cohost@user.io',
         username: 'cohost',
         hashedPassword: bcrypt.hashSync('password')
+      },
+      {
+        firstName: "Pen",
+        lastName: "Ding",
+        email: 'pending@user.io',
+        username: 'pending',
+        hashedPassword: bcrypt.hashSync('password')
+      },
+      {
+        firstName: "Mem",
+        lastName: "Ber",
+        email: "member@user.io",
+        username: "member",
+        hashedPassword: bcrypt.hashSync('password')
       }
     ], { validate: true });
   },

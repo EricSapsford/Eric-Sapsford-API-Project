@@ -23,6 +23,85 @@ var globalVenueIdCount = 3;
 //------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
 //------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
 
+router.get("/:groupId/members", async (req, res) => {
+
+  const { user } = req;
+  const userId = user.dataValues.id;
+  const groupId = req.params.groupId;
+
+  let members = await Membership.findAll({
+    include: [
+      { model: User },
+      { model: Groupe }
+    ],
+    where: {
+      groupId
+    }
+  })
+
+
+  // console.log("organ", members[0].dataValues.Groupe.dataValues.organizerId)
+  // console.log("user", userId)
+
+
+  if (members.length === 0) {
+    res.status(404)
+    return res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+
+  // console.log(members);
+  let cohostToken = 0;
+  for (let j = 0; j < members.length; j++) {
+    if (userId === members[j].User.id && members[j].status === "co-host") cohostToken++;
+  }
+
+  if (userId === members[0].dataValues.Groupe.dataValues.organizerId || cohostToken === 1) {
+
+    let membersArr = [];
+    for (let i = 0; i < members.length; i++) {
+      // console.log("hello")
+      let membersObj = {
+        id: members[i].User.id,
+        firstName: members[i].User.firstName,
+        lastName: members[i].User.lastName,
+        Membership: {
+          status: members[i].status
+        }
+      }
+      membersArr.push(membersObj);
+    }
+
+    res.status(200);
+    return res.json({ Members: membersArr });
+  } else {
+
+    let membersArr = [];
+    for (let i = 0; i < members.length; i++) {
+      let index = i;
+      let currStatus = members[i].status
+      console.log(currStatus)
+      while (currStatus === "pending") {
+        i++;
+        currStatus = members[index + 1].status
+      }
+      let membersObj = {
+        id: members[i].User.id,
+        firstName: members[i].User.firstName,
+        lastName: members[i].User.lastName,
+        Membership: {
+          status: members[i].status
+        }
+      }
+      membersArr.push(membersObj);
+    }
+
+    res.status(200);
+    return res.json({ Members: membersArr });
+  }
+})
+
 router.get("/:groupId/events", async (req, res) => {
 
   const groupId = req.params.groupId
