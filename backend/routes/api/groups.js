@@ -304,28 +304,46 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
 */
 
 router.get("/current", requireAuth, async (req, res) => {
-  const { user } = req
 
-  let groupes = await Groupe.findAll({
-    raw: true,
-    include: [{
-      model: Membership,
-      attributes: [],
-    }],
-    attributes: {
-      // ^C ^V you sweet sweet siren
-      include: [
-        [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
-      ]
-    },
-    group: ["Groupe.id"]
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  const userId = user.dataValues.id;
+
+  let groups = await Groupe.findAll({
+    include: [
+      {
+        model: Membership,
+        attributes: [],
+        where: {
+          userId: userId
+        },
+      },
+      {
+        model: GroupImage,
+        attributes: [],
+      }
+    ],
   })
 
-  //copypaste from get all down there
-  //_____________________________________________________
-  for (let index = 0; index < groupes.length; index++) {
-    // let image = await Groupe.findall(
-    let image = await Groupe.findByPk(groupes[index].id, {
+  for (let i = 0; i < groups.length; i++) {
+    let membership = await Membership.findAll({
+      where: {
+        groupId: groups[i].id
+      }
+    })
+
+    groups[i].dataValues.numMembers = membership.length
+  }
+
+  for (let index = 0; index < groups.length; index++) {
+    let image = await Groupe.findByPk(groups[index].id, {
       raw: true,
       include: [{
         model: GroupImage,
@@ -336,19 +354,16 @@ router.get("/current", requireAuth, async (req, res) => {
       }]
     });
 
-    groupes[index].numMembers = Number(groupes[index].numMembers);
-
     if (image) {
-      groupes[index].previewImage = image["GroupImages.url"];
+      groups[index].dataValues.previewImage = image["GroupImages.url"];
     } else {
-      groupes[index].previewImage = "preview does not exist";
+      groups[index].dataValues.previewImage = "preview does not exist";
     };
   }
-  //_____________________________________________________
 
   return res.json({
-    //this will ALWAYS feel wrong
-    Groups: groupes
+    //this feels wrong
+    Groups: groups
   });
 })
 
