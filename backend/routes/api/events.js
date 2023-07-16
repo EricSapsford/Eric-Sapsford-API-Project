@@ -519,7 +519,7 @@ const validateEvent = [
     .withMessage("Capacity must be an integer"),
   check("price")
     .exists({ checkFalsy: true })
-    .isDecimal({ decimal_digits: 2 })
+    .isDecimal()
     .withMessage("Price is invalid"),
   check('startDate')
     .exists({ checkFalsy: true })

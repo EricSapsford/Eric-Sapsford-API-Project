@@ -914,6 +914,8 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 
   let groupe = await Groupe.findByPk(groupId)
 
+  console.log(groupe);
+
   if (!groupe) {
     res.status(404);
     return res.json({
@@ -931,7 +933,11 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
     })
   }
 
-  let memUser = await User.findByPk(memberId);
+  let memUser = await Membership.findByPk(memberId, {
+    where: {
+      userId: userId
+    }
+  });
 
   if (!memUser) {
     res.status(400);
@@ -943,17 +949,16 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
     })
   }
 
-  let membership = await Membership.findOne({
+  let membership = await Membership.findByPk(memberId, {
     where: {
-      groupId,
-      userId: memberId
+      groupId: groupId
     }
   })
 
   if (!membership) {
     res.status(400);
     return res.json({
-      "message": "Membership does not exist for this User"
+      "message": "Membership between the user and the group does not exist"
     })
   }
 
@@ -968,19 +973,19 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
   let organToken = false;
   let hostCohost = false;
 
-  let userMembership = await Membership.findOne({
+  let currUserMembership = await Membership.findOne({
     where: {
-      userId,
-      groupId
+      userId: userId,
+      groupId: groupId
     }
   })
 
-  if (!userMembership) {
+  if (!currUserMembership) {
     res.status(404);
     res.json({
-      "message": "I don't think you can see this one"
+      "message": "You don't belong to this group"
     })
-  } else if (userMembership.status === "host" || userMembership.status === "co-host") {
+  } else if (currUserMembership.status === "host" || currUserMembership.status === "co-host") {
     hostCohost = true;
   }
 
