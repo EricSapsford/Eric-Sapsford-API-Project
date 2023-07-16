@@ -37,7 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    venueId: DataTypes.INTEGER,
+    venueId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     groupId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     description: DataTypes.TEXT,

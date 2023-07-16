@@ -128,14 +128,16 @@ router.get("/:groupId/members", async (req, res) => {
   }
 })
 
+//---------------- GET ALL EVENTS OF A GROUP SPECIFIED BY ITS ID ----------------
+//---------------- GET ALL EVENTS OF A GROUP SPECIFIED BY ITS ID ----------------
+//---------------- GET ALL EVENTS OF A GROUP SPECIFIED BY ITS ID ----------------
+//---------------- GET ALL EVENTS OF A GROUP SPECIFIED BY ITS ID ----------------
+
 router.get("/:groupId/events", async (req, res) => {
 
-  const groupId = req.params.groupId
+  const groupId = req.params.groupId;
 
   let events = await Event.findAll({
-    where: {
-      groupId,
-    },
     include: [
       {
         model: Attendance,
@@ -152,7 +154,10 @@ router.get("/:groupId/events", async (req, res) => {
           "name",
           "city",
           "state"
-        ]
+        ],
+        where: {
+          id: groupId
+        }
       },
       {
         model: Venue,
@@ -163,20 +168,28 @@ router.get("/:groupId/events", async (req, res) => {
         ]
       }
     ],
-    attributes: {
-      include: [
-        [sequelize.fn("COUNT", sequelize.col("Attendances.eventId")), "numAttending"]
-      ],
-      // previewImage: EventImage.dataValues.url
-    },
-    group: ["Event.id"]
+    attributes: [
+      "id",
+      "groupId",
+      "venueId",
+      "name",
+      "type",
+      "startDate",
+      "endDate",
+    ],
   })
 
-  if (events.length === 0) {
-    res.status(404)
-    return res.json({
-      "message": "Group couldn't be found"
+  for (let i = 0; i < events.length; i++) {
+    let attendance = await Attendance.findAll({
+      where: {
+        eventId: events[i].id,
+        status: {
+          [Op.not]: "pending"
+        }
+      }
     })
+
+    events[i].dataValues.numAttending = attendance.length
   }
 
   for (let index = 0; index < events.length; index++) {
@@ -191,7 +204,7 @@ router.get("/:groupId/events", async (req, res) => {
       }]
     });
 
-    // console.log("******NEWLINE******", image);
+    // console.log("******NEWLINE******", image)
 
     if (image) {
       events[index].dataValues.previewImage = image["EventImages.url"];
@@ -200,10 +213,13 @@ router.get("/:groupId/events", async (req, res) => {
     };
   }
 
-  console.log("=====EVENTS=====", events)
+  // console.log("=====EVENTS=====", events)
+
+  if (events.length === 0) events = null;
 
   res.status(200)
   return res.json({ Events: events })
+
 
 });
 
@@ -1433,7 +1449,7 @@ router.post("/:groupeId/images", requireAuth, async (req, res) => {
   // console.log(user)
 
   const userId = user.dataValues.id;
-  const groupeId = req.params.groupeId; // <-- seriously stop destructuring these
+  const groupeId = req.params.groupeId;
 
   const { url, preview } = req.body;
 

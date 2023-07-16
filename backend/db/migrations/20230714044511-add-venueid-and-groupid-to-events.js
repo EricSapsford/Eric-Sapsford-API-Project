@@ -21,6 +21,7 @@ module.exports = {
      */
     await queryInterface.addColumn(options, "venueId", {
       type: Sequelize.INTEGER,
+      allowNull: true,
       references: {
         model: "Venues",
         key: "id",
