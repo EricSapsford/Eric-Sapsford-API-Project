@@ -25,7 +25,9 @@ module.exports = {
         model: "Groupes",
         key: "id",
         deferrable: Deferrable.INITIALLY_DEFERRED
-      }
+      },
+      onDelete: "CASCADE",
+      hooks: true
     })
   },
 

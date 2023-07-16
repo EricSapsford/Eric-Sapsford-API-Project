@@ -15,6 +15,166 @@ const router = express.Router();
 
 //============================== GET REQUESTS ==============================
 
+//------------ GET ALL ATTENDEES OF AN EVENT SPECIFIED BY ITS ID -----------
+//------------ GET ALL ATTENDEES OF AN EVENT SPECIFIED BY ITS ID -----------
+//------------ GET ALL ATTENDEES OF AN EVENT SPECIFIED BY ITS ID -----------
+//------------ GET ALL ATTENDEES OF AN EVENT SPECIFIED BY ITS ID -----------
+
+router.get("/:eventId/attendees", async (req, res) => {
+
+  const { user } = req;
+  const userId = user.dataValues.id;
+  const eventId = req.params.eventId;
+
+  let attendies = await Attendance.findAll({
+    include: [
+      {
+        model: User,
+        include: [
+          {
+            model: Groupe
+          }
+        ]
+      },
+      { model: Event }
+    ],
+    where: {
+      eventId
+    }
+  })
+
+  if (attendies.length === 0) {
+    res.status(404);
+    return req.json({
+      "message": "Event couldn't be found"
+    })
+  }
+
+  // let findcoHost = await Attendance.findOne({
+  //   includ: [
+  //     {
+  //       model: User,
+  //       include: [
+  //         {
+  //           model: Membership,
+  //           where: {
+  //             status: "co-host",
+  //             userId
+  //           }
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // })
+
+  // console.log(findcoHost)
+
+  let cohostToken = false;
+  // if (findcoHost) cohostToken = true;
+  // console.log("CHOHOST", cohostToken);
+
+  for (let j = 0; j < attendies.length; j++) {
+    console.log(attendies);
+    console.log(attendies[j].User.id)
+    for (let index = 0; index < attendies[j].User.dataValues.Groupes.length; index++) {
+      if (userId === attendies[j].User.id && attendies[j].User.dataValues.Groupes[index].dataValues.Membership.dataValues.status === "co-host") cohostToken = true;
+    }
+  }
+
+  // console.log(cohostToken);
+
+  let organToken = false
+  // let findOrgan = await Attendance.findOne({
+  //   include: [
+  //     {
+  //       model: User,
+  //       include: [
+  //         {
+  //           model: Groupe,
+  //           where: {
+  //             organizerId: userId
+  //           }
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // })
+
+  // console.log("ORGAN", organToken);
+  // if (findOrgan) organToken = true;
+
+  // JUST TO SHOW THAT I COULD. THIS WAS ACTUALLY REALLY FUN
+  for (let k = 0; k < attendies.length; k++) {
+    for (let index = 0; index < attendies[k].dataValues.User.dataValues.Groupes.length; index++) {
+      if (userId === attendies[k].dataValues.User.dataValues.Groupes[index].dataValues.organizerId) organToken = true;
+    }
+  }
+
+  if (organToken || cohostToken) {
+
+    let attendiesArr = [];
+    for (let i = 0; i < attendies.length; i++) {
+      let realId = await Attendance.findOne({
+        where: {
+          userId: attendies[i].User.id,
+          eventId,
+        }
+      })
+      // console.log("****REALID****", realId);
+      // console.log("hello")
+      let attendiesObj = {
+        id: realId.id,
+        firstName: attendies[i].User.firstName,
+        lastName: attendies[i].User.lastName,
+        Attendance: {
+          status: attendies[i].status
+        }
+      }
+      attendiesArr.push(attendiesObj);
+    }
+
+    res.status(200);
+    return res.json({ Attendees: attendiesArr });
+  } else {
+
+    let attendiesArr = [];
+    for (let i = 0; i < attendies.length; i++) {
+      let realId = await Attendance.findOne({
+        where: {
+          userId: attendies[i].User.id,
+          eventId,
+        }
+      })
+      let index = i;
+      let currStatus = attendies[i].status
+      // console.log(currStatus)
+      while (currStatus === "pending") {
+        i++;
+        if (i >= attendies.length) {
+          i--;
+          break;
+        }
+        currStatus = attendies[index + 1].status
+      }
+      let attendiesObj = {
+        id: realId.id,
+        firstName: attendies[i].User.firstName,
+        lastName: attendies[i].User.lastName,
+        Attendance: {
+          status: attendies[i].status
+        }
+      }
+      attendiesArr.push(attendiesObj);
+      if (attendiesArr[attendiesArr.length - 1].Attendance.status === "pending") {
+        attendiesArr.pop()
+      }
+    }
+
+    res.status(200);
+    return res.json({ Attendees: attendiesArr });
+  }
+})
+
 //-------------- GET DETAILS OF AN EVENT SPECIFIED BY ITS ID ---------------
 //-------------- GET DETAILS OF AN EVENT SPECIFIED BY ITS ID ---------------
 //-------------- GET DETAILS OF AN EVENT SPECIFIED BY ITS ID ---------------
@@ -156,12 +316,68 @@ router.get("/:eventId", async (req, res) => {
   //   return res.json({ Events: events })
 });
 
+//__________________________________ validator __________________________________
+
+const validatePaginatorAndQueries = [
+  check("page")
+    .optional()
+    .custom(async value => {
+      if (value <= 0) {
+        throw new Error();
+      }
+    })
+    .withMessage("Page must be greater than or equal to 1"),
+  check("size")
+    .optional()
+    .custom(async value => {
+      if (value <= 0) {
+        throw new Error();
+      }
+    })
+    .withMessage("Size must be greater than or equal to 1"),
+  check("name")
+    .optional()
+    .exists({ checkFalsy: true })
+    .isString()
+    .withMessage("Name must be a string"),
+  check("name")
+    .optional()
+    .exists({ checkFalsy: true })
+    .isLength({ min: 5 })
+    .withMessage("Name must be at least 5 characters"),
+  check("type")
+    .optional()
+    .exists({ checkFalsy: true })
+    .isIn(["Online", "In person"])
+    .withMessage("Type must be 'Online' or 'In person'"),
+  // check("startDate")
+  //   .exists({ checkFalsy: false })
+  //   .isDate()
+  //   .withMessage("Start date must be a valid datetime"),
+  handleValidationErrors
+];
+
 //----------------------------- GET ALL EVENTS -----------------------------
 //----------------------------- GET ALL EVENTS -----------------------------
 //----------------------------- GET ALL EVENTS -----------------------------
 //----------------------------- GET ALL EVENTS -----------------------------
 
-router.get("/", async (req, res) => {
+router.get("/", validatePaginatorAndQueries, async (req, res) => {
+
+  //PAGE THAT NATOR, QUERY THE DYNAMICS
+  let { page, size, name, type, startDate } = req.query
+
+  let queryObj = {
+    order: [["name", "ASC"]],
+    where: {},
+  }
+
+  if (name !== undefined) queryObj.where.name = name;
+  if (type !== undefined) queryObj.where.type = type;
+  // if (startDate !== undefined) queryObj.where.date = date
+
+  if (!page || page > 10) page = 1;
+  if (!size || size > 20) size = 20;
 
   let events = await Event.findAll({
     include: [
@@ -199,13 +415,19 @@ router.get("/", async (req, res) => {
       "type",
       "startDate",
       "endDate",
-    ]
+    ],
+    limit: size,
+    offset: (page - 1) * size,
+    ...queryObj
   })
 
   for (let i = 0; i < events.length; i++) {
     let attendance = await Attendance.findAll({
       where: {
-        eventId: events[i].id
+        eventId: events[i].id,
+        status: {
+          [Op.not]: "pending"
+        }
       }
     })
 
@@ -235,8 +457,10 @@ router.get("/", async (req, res) => {
 
   // console.log("=====EVENTS=====", events)
 
+  if (events.length === 0) events = null;
+
   res.status(200)
-  return res.json({ Evetns: events })
+  return res.json({ Events: events })
 
 })
 
@@ -273,6 +497,13 @@ const validateEvent = [
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage("End date is required"),
+  check('venueId')
+    .exists({ checkFalsy: true })
+    .custom(async value => {
+      const venue = await Venue.findByPk(value);
+      if (!venue) throw new Error();
+    })
+    .withMessage("Venue does not exist"),
   // THAT DOES IT FOR THE EXISTS CHECKS
   check("name")
     .exists({ checkFalsy: true })
@@ -286,14 +517,139 @@ const validateEvent = [
     .exists({ checkFalsy: true })
     .isInt()
     .withMessage("Capacity must be an integer"),
-  // check("price")
-  //   .exists({ checkFalsy: true })
-  //   .isDecimal({ decimal_digits: 2 })
-  //   .withMessage("Price is invalid"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .isDecimal({ decimal_digits: 2 })
+    .withMessage("Price is invalid"),
+  check('startDate')
+    .exists({ checkFalsy: true })
+    .isAfter(Date.parse(Date.now()))
+    .withMessage(`Start date must be in the future`),
+  check('endDate')
+    .exists({ checkFalsy: true })
+    .isAfter(Date.parse(this.startDate))
+    .withMessage(`End date must be after start date`),
   handleValidationErrors
 ];
 
 //================================= PUT REQUESTS ================================
+
+//------- CHANGE THE STATUS OF AN ATTENDANCE FOR AN EVENT SPECIFIED BY ID -------
+//------- CHANGE THE STATUS OF AN ATTENDANCE FOR AN EVENT SPECIFIED BY ID -------
+//------- CHANGE THE STATUS OF AN ATTENDANCE FOR AN EVENT SPECIFIED BY ID -------
+//------- CHANGE THE STATUS OF AN ATTENDANCE FOR AN EVENT SPECIFIED BY ID -------
+
+router.put("/:eventId/attendance", requireAuth, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+
+  const { userId, status } = req.body
+  const currUserId = user.dataValues.id;
+  const eventId = req.params.eventId;
+
+  let event = await Event.findByPk(eventId)
+
+  if (!event) {
+    res.status(404);
+    return res.json({
+      "message": "Event couldn't be found"
+    })
+  }
+
+  if (status === "pending") {
+    res.status(400);
+    return res.json({
+      "message": "Cannot change an attendance status to pending"
+    })
+  }
+
+  let attendance = await Attendance.findOne({
+    where: {
+      eventId,
+      userId,
+    }
+  })
+
+  // console.log(attendance)
+
+  if (!attendance) {
+    res.status(400);
+    return res.json({
+      "message": "Attendance between the user and the event does not exist"
+    })
+  }
+
+  let attendies = await Attendance.findAll({
+    include: [
+      {
+        model: User,
+        include: [
+          {
+            model: Groupe
+          }
+        ]
+      },
+      { model: Event }
+    ],
+    where: {
+      eventId
+    }
+  })
+
+  let cohostToken = false;
+  for (let j = 0; j < attendies.length; j++) {
+    for (let index = 0; index < attendies[j].User.dataValues.Groupes.length; index++) {
+      if (currUserId === attendies[j].User.id && attendies[j].User.dataValues.Groupes[index].dataValues.Membership.dataValues.status === "co-host") cohostToken = true;
+    }
+  }
+
+
+  let organToken = false
+  for (let k = 0; k < attendies.length; k++) {
+    for (let index = 0; index < attendies[k].dataValues.User.dataValues.Groupes.length; index++) {
+      if (currUserId === attendies[k].dataValues.User.dataValues.Groupes[index].dataValues.organizerId) organToken = true;
+    }
+  }
+
+  // console.log(cohostToken, organToken)
+
+  if (status === "attending" && (organToken || cohostToken)) {
+    attendance.status = status;
+    await attendance.save();
+
+    let findAtt = await Attendance.findOne({
+      attributes: [
+        "id",
+        "eventId",
+        "userId",
+        "status"
+      ],
+      where: {
+        userId,
+        eventId,
+        status,
+      }
+    })
+
+    res.status(200);
+    // return res.jston(findMember)
+    return res.json(findAtt)
+  }
+
+  res.status(403);
+  return res.json({
+    "message": "You are not authorized to make that change"
+  })
+
+})
 
 //--------------------- EDIT AN EVENT SPECIFIED BY ITS ID -----------------------
 //--------------------- EDIT AN EVENT SPECIFIED BY ITS ID -----------------------
@@ -410,10 +766,89 @@ router.put("/:eventId", requireAuth, validateEvent, async (req, res) => {
 
 //================================ POST REQUESTS ================================
 
-//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ---------------
-//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ---------------
-//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ---------------
-//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ---------------
+//------------- REQUEST TO ATTEND AN EVENT BASED ON THE EVENT'S ID -------------
+//------------- REQUEST TO ATTEND AN EVENT BASED ON THE EVENT'S ID -------------
+//------------- REQUEST TO ATTEND AN EVENT BASED ON THE EVENT'S ID -------------
+//------------- REQUEST TO ATTEND AN EVENT BASED ON THE EVENT'S ID -------------
+
+router.post("/:eventId/attendance", requireAuth, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+
+  const userId = user.dataValues.id;
+  const eventId = req.params.eventId;
+
+
+  const event = await Event.findByPk(eventId);
+
+  if (!event) {
+    res.status(404)
+    return res.json({
+      "message": "Event couldn't be found"
+    })
+  }
+
+
+  const isPending = await Attendance.findOne({
+    where: {
+      userId,
+      eventId,
+      status: "pending"
+    }
+  })
+
+  if (isPending) {
+    res.status(404);
+    return res.json({
+      "message": "Attendance has already been requested"
+    })
+  }
+
+  const isTendie = await Attendance.findOne({
+    where: {
+      userId,
+      eventId,
+      status: "attending"
+    }
+  })
+
+  if (isTendie) {
+    res.status(404);
+    return res.json({
+      "message": "User is already a attendee of the group"
+    })
+  }
+  //-------------------------------------------------------------------------
+
+  await Attendance.bulkCreate([{
+    userId,
+    eventId,
+    status: "pending",
+  },
+  ], { validate: true })
+
+  let newTendieObj = {
+    userId,
+    status: "pending"
+  }
+
+  res.status(200);
+  return res.json(newTendieObj)
+
+})
+
+//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ----------------
+//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ----------------
+//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ----------------
+//------------- ADD AN IMAGE TO A EVENT BASED ON THE EVENT'S ID ----------------
 
 router.post("/:eventId/images", requireAuth, async (req, res) => {
 
@@ -511,6 +946,88 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 })
 
 //============================== DELETE REQUESTS ==============================
+
+// -------------- DELETE ATTENDANCE TO AN EVENT SPECIFIED BY ID ---------------
+// -------------- DELETE ATTENDANCE TO AN EVENT SPECIFIED BY ID ---------------
+// -------------- DELETE ATTENDANCE TO AN EVENT SPECIFIED BY ID ---------------
+// -------------- DELETE ATTENDANCE TO AN EVENT SPECIFIED BY ID ---------------
+
+router.delete("/:eventId/attendance", requireAuth, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  const currUserId = user.dataValues.id;
+  const eventId = req.params.eventId;
+  const { userId } = req.body
+
+  let event = await Event.findByPk(eventId)
+
+  if (!event) {
+    res.status(404);
+    return res.json({
+      "message": "Event couldn't be found"
+    })
+  }
+
+  let attendance = await Attendance.findOne({
+    where: {
+      eventId,
+      userId,
+    }
+  })
+
+  // console.log(attendance)
+
+  if (!attendance) {
+    res.status(400);
+    return res.json({
+      "message": "Attendance does not exist for this User"
+    })
+  }
+
+  //-----------------------------------------------------------------
+
+  let findCurrUser = await User.findByPk(currUserId, {
+    include: [
+      {
+        model: Groupe
+      }
+    ]
+  })
+
+  let hostToken = false;
+  // console.log(findCurrUser)
+  for (let i = 0; i < findCurrUser.dataValues.Groupes.length; i++) {
+    if (findCurrUser.dataValues.Groupes[i].dataValues.id === event.groupId && findCurrUser.dataValues.Groupes[i].dataValues.Membership.dataValues.status === "host") hostToken = true;
+    // console.log(findCurrUser.dataValues.Groupes[i].dataValues.id)
+    // console.log(findCurrUser.dataValues.Groupes[i].dataValues.Membership.dataValues.status)
+  }
+
+  let memberToken = false;
+
+  if (userId === currUserId) memberToken = true;
+
+  if (hostToken || memberToken) {
+    await attendance.destroy();
+    res.status(200);
+    return res.json({
+      "message": "Successfully deleted attendance from event"
+    })
+  } else {
+    res.status(403);
+    return res.json({
+      "message": "You there buckeroo don't have the authorization for that"
+    })
+  }
+
+})
 
 //-------------------- DELETE AN EVENT SPECIFIED BY ITS ID --------------------
 //-------------------- DELETE AN EVENT SPECIFIED BY ITS ID --------------------

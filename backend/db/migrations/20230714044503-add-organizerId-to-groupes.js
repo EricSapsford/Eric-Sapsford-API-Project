@@ -24,8 +24,9 @@ module.exports = {
       references: {
         model: "Users",
         key: "id",
-        deferrable: Deferrable.INITIALLY_DEFERRED
-      }
+      },
+      onDelete: "CASCADE",
+      hooks: true
     })
   },
 

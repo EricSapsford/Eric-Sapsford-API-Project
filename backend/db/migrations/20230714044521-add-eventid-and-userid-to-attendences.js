@@ -25,7 +25,9 @@ module.exports = {
         model: "Events",
         key: "id",
         deferrable: Deferrable.INITIALLY_DEFERRED
-      }
+      },
+      onDelete: "CASCADE",
+      hooks: true
     })
     await queryInterface.addColumn(options, "userId", {
       type: Sequelize.INTEGER,
@@ -33,7 +35,9 @@ module.exports = {
         model: "Users",
         key: "id",
         deferrable: Deferrable.INITIALLY_DEFERRED
-      }
+      },
+      onDelete: "CASCADE",
+      hooks: true
     })
   },
 

@@ -9,19 +9,15 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 
 
 const router = express.Router();
-
-var globalVenueId = [1, 2, 3];
-var globalVenueIdCount = 3;
-
 //=============================== END POINTS ===============================
 
 
 //============================== GET REQUESTS ==============================
 
-//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
-//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
-//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
-//------------- GET ALL EVENTS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL MEMBERS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL MEMBERS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL MEMBERS OF A GROUPE SPECIFIED BY ITS ID -------------
+//------------- GET ALL MEMBERS OF A GROUPE SPECIFIED BY ITS ID -------------
 
 router.get("/:groupId/members", async (req, res) => {
 
@@ -38,7 +34,6 @@ router.get("/:groupId/members", async (req, res) => {
       groupId
     }
   })
-
 
   // console.log("organ", members[0].dataValues.Groupe.dataValues.organizerId)
   // console.log("user", userId)
@@ -61,9 +56,16 @@ router.get("/:groupId/members", async (req, res) => {
 
     let membersArr = [];
     for (let i = 0; i < members.length; i++) {
+      let realId = await Membership.findOne({
+        where: {
+          userId: members[i].User.id,
+          groupId,
+        }
+      })
+      // console.log("****REALID****", realId);
       // console.log("hello")
       let membersObj = {
-        id: members[i].User.id,
+        id: realId.id,
         firstName: members[i].User.firstName,
         lastName: members[i].User.lastName,
         Membership: {
@@ -79,15 +81,25 @@ router.get("/:groupId/members", async (req, res) => {
 
     let membersArr = [];
     for (let i = 0; i < members.length; i++) {
+      let realId = await Membership.findOne({
+        where: {
+          userId: members[i].User.id,
+          groupId,
+        }
+      })
       let index = i;
       let currStatus = members[i].status
       console.log(currStatus)
       while (currStatus === "pending") {
         i++;
+        if (i >= members.length) {
+          i--;
+          break;
+        }
         currStatus = members[index + 1].status
       }
       let membersObj = {
-        id: members[i].User.id,
+        id: realId.id,
         firstName: members[i].User.firstName,
         lastName: members[i].User.lastName,
         Membership: {
@@ -95,6 +107,9 @@ router.get("/:groupId/members", async (req, res) => {
         }
       }
       membersArr.push(membersObj);
+      if (membersArr[membersArr.length - 1].Membership.status === "pending") {
+        membersArr.pop()
+      }
     }
 
     res.status(200);
@@ -562,12 +577,12 @@ router.get("/", async (req, res) => {
 
 //============================= DELETE REQUESTS =================================
 
-//----------------------------- DELETE A GROUPE ---------------------------------
-//----------------------------- DELETE A GROUPE ---------------------------------
-//----------------------------- DELETE A GROUPE ---------------------------------
-//----------------------------- DELETE A GROUPE ---------------------------------
+//--------------- DELETE MEMBERSHIP TO A GROUP SPECIFIED BY ID ------------------
+//--------------- DELETE MEMBERSHIP TO A GROUP SPECIFIED BY ID ------------------
+//--------------- DELETE MEMBERSHIP TO A GROUP SPECIFIED BY ID ------------------
+//--------------- DELETE MEMBERSHIP TO A GROUP SPECIFIED BY ID ------------------
 
-router.delete("/:groupeId", requireAuth, async (req, res) => {
+router.delete("/:groupId/membership", requireAuth, async (req, res) => {
 
   // log in check
   const { user } = req;
@@ -579,13 +594,100 @@ router.delete("/:groupeId", requireAuth, async (req, res) => {
   }
 
   const userId = user.dataValues.id;
-  const groupeId = req.params.groupeId;
+  const groupId = req.params.groupId;
+  const { memberId } = req.body
 
-  const groupe = await Groupe.findByPk(groupeId);
+  let groupe = await Groupe.findByPk(groupId)
 
-  if (groupe) {
-    if (groupe.organizerId === userId) {
-      await groupe.destroy();
+  if (!groupe) {
+    res.status(404);
+    return res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+
+  let memUser = await User.findByPk(memberId);
+
+  if (!memUser) {
+    res.status(400);
+    return res.json({
+      message: "Validation Error",
+      errors: {
+        status: "User couldn't be found"
+      }
+    })
+  }
+
+  let membership = await Membership.findOne({
+    where: {
+      groupId,
+      userId: memberId
+    }
+  })
+
+  if (!membership) {
+    res.status(400);
+    return res.json({
+      "message": "Membership does not exist for this User"
+    })
+  }
+
+  let hostOrmem = false;
+  let userMembership = await Membership.findOne({
+    where: {
+      userId,
+      groupId
+    }
+  })
+
+  if (!userMembership) {
+    res.status(404);
+    res.json({
+      "message": "I don't think you can see this one"
+    })
+  } else if (userMembership.status === "host" || userMembership.userId === memberId) {
+    hostOrmem = true;
+  }
+
+  if (hostOrmem) {
+    await membership.destroy();
+    res.status(200);
+    return res.json({
+      "message": "Successfully deleted"
+    })
+  } else {
+    res.status(403);
+    return res.json({
+      "message": "Whoa there buckeroo, that ain't yours"
+    })
+  }
+
+})
+
+//----------------------------- DELETE A GROUPE ---------------------------------
+//----------------------------- DELETE A GROUPE ---------------------------------
+//----------------------------- DELETE A GROUPE ---------------------------------
+//----------------------------- DELETE A GROUPE ---------------------------------
+
+router.delete("/:groupId", requireAuth, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  const userId = user.dataValues.id;
+  const groupId = req.params.groupId;
+
+  const group = await Groupe.findByPk(groupId);
+
+  if (group) {
+    if (group.organizerId === userId) {
+      await group.destroy();
       res.status(200)
       return res.json({
         "message": "Successfully deleted",
@@ -603,8 +705,6 @@ router.delete("/:groupeId", requireAuth, async (req, res) => {
     })
   }
 })
-
-//============================== PUT REQUESTS ===================================
 
 //_______________________________ validator ________________________________
 
@@ -718,11 +818,14 @@ const validateEvent = [
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage("End date is required"),
-  // THAT DOES IT FOR THE EXISTS CHECKS
-  check("venueId")
+  check('venueId')
     .exists({ checkFalsy: true })
-    .isIn(globalVenueId)
+    .custom(async value => {
+      const venue = await Venue.findByPk(value);
+      if (!venue) throw new Error();
+    })
     .withMessage("Venue does not exist"),
+  // THAT DOES IT FOR THE EXISTS CHECKS
   check("name")
     .exists({ checkFalsy: true })
     .isLength({ min: 5 })
@@ -735,13 +838,164 @@ const validateEvent = [
     .exists({ checkFalsy: true })
     .isInt()
     .withMessage("Capacity must be an integer"),
-  // check("price")
-  //   .exists({ checkFalsy: true })
-  //   .isDecimal({ decimal_digits: 2 })
-  //   .withMessage("Price is invalid"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .isDecimal()
+    .withMessage("Price is invalid"),
+  check('startDate')
+    .exists({ checkFalsy: true })
+    .isAfter(Date.parse(Date.now()))
+    .withMessage(`Start date must be in the future`),
+  check('endDate')
+    .exists({ checkFalsy: true })
+    .isAfter(Date.parse(this.startDate))
+    .withMessage(`End date must be after start date`),
   handleValidationErrors
 ];
 
+//============================== PUT REQUESTS ===================================
+
+//------- CHANGE THE STATUS OF A MEMBERSHIP FOR A GROUPE SPECIFIED BY ID  -------
+//------- CHANGE THE STATUS OF A MEMBERSHIP FOR A GROUPE SPECIFIED BY ID  -------
+//------- CHANGE THE STATUS OF A MEMBERSHIP FOR A GROUPE SPECIFIED BY ID  -------
+//------- CHANGE THE STATUS OF A MEMBERSHIP FOR A GROUPE SPECIFIED BY ID  -------
+
+router.put("/:groupId/membership", requireAuth, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  const { memberId, status } = req.body
+  const userId = user.dataValues.id;
+  const groupId = req.params.groupId;
+
+  let groupe = await Groupe.findByPk(groupId)
+
+  if (!groupe) {
+    res.status(404);
+    return res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+
+  if (status === "pending") {
+    res.status(400);
+    return res.json({
+      message: "Validation Error",
+      errors: {
+        status: "Cannot change a membership status to pending"
+      }
+    })
+  }
+
+  let memUser = await User.findByPk(memberId);
+
+  if (!memUser) {
+    res.status(400);
+    return res.json({
+      message: "Validation Error",
+      errors: {
+        status: "User couldn't be found"
+      }
+    })
+  }
+
+  let membership = await Membership.findOne({
+    where: {
+      groupId,
+      userId: memberId
+    }
+  })
+
+  if (!membership) {
+    res.status(400);
+    return res.json({
+      "message": "Membership does not exist for this User"
+    })
+  }
+
+  if (status === "member" && membership.status === "member") {
+    res.status(400);
+    return res.json({
+      "message": "User is already a member of the group"
+    })
+  }
+
+
+  let organToken = false;
+  let hostCohost = false;
+
+  let userMembership = await Membership.findOne({
+    where: {
+      userId,
+      groupId
+    }
+  })
+
+  if (!userMembership) {
+    res.status(404);
+    res.json({
+      "message": "I don't think you can see this one"
+    })
+  } else if (userMembership.status === "host" || userMembership.status === "co-host") {
+    hostCohost = true;
+  }
+
+  if (userId === groupe.organizerId) organToken = true;
+
+  if (status === "member" && (organToken || hostCohost)) {
+    membership.status = status;
+    await membership.save();
+
+    // let findMember = await Membership.findOne({
+    //   where: {
+    //     id: memberId,
+    //     groupId,
+    //   }
+    // })
+
+    let memObj = {
+      memberId,
+      status,
+    }
+
+    res.status(200);
+    // return res.jston(findMember)
+    return res.json(memObj)
+  }
+
+  if (status === "co-host" && organToken) {
+    membership.status = status;
+    await membership.save();
+
+    // let findMember = await Membership.findOne({
+    //   where: {
+    //     id: memberId,
+    //     groupId,
+    //   }
+    // })
+
+    let memObj = {
+      memberId,
+      status,
+    }
+
+    res.status(200);
+    // return res.json(findMember)
+    return res.json(memObj)
+  }
+
+  res.status(403);
+  return res.json({
+    "message": "You are not authorized to make that change"
+  })
+})
 
 //------------------------------ EDIT A GROUP -----------------------------------
 //------------------------------ EDIT A GROUP -----------------------------------
@@ -798,6 +1052,83 @@ router.put("/:groupId", requireAuth, validateGroupe, async (req, res) => {
 
 
 //============================== POST REQUESTS ==================================
+
+//----------- REQUEST A MEMBERSHIP FOR A GROUP BASED ON THE GROUP'S ID ----------
+//----------- REQUEST A MEMBERSHIP FOR A GROUP BASED ON THE GROUP'S ID ----------
+//----------- REQUEST A MEMBERSHIP FOR A GROUP BASED ON THE GROUP'S ID ----------
+//----------- REQUEST A MEMBERSHIP FOR A GROUP BASED ON THE GROUP'S ID ----------
+
+router.post("/:groupId/membership", requireAuth, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+
+  const userId = user.dataValues.id;
+  const groupId = req.params.groupId;
+
+  const group = await Groupe.findByPk(groupId);
+
+  if (!group) {
+    res.status(404)
+    return res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+
+  const isPending = await Membership.findOne({
+    where: {
+      userId,
+      groupId,
+      status: "pending"
+    }
+  })
+
+  if (isPending) {
+    res.status(404);
+    return res.json({
+      "message": "Membership has already been requested"
+    })
+  }
+
+  const isMember = await Membership.findOne({
+    where: {
+      userId,
+      groupId,
+    }
+  })
+
+  if (isMember) {
+    res.status(404);
+    return res.json({
+      "message": "User is already a member of the group"
+    })
+  }
+
+  await Membership.bulkCreate([{
+    userId,
+    groupId,
+    status: "pending",
+  },
+  ], { validate: true })
+
+  let newMemberObj = {
+    memberId: userId,
+    status: "pending"
+  }
+
+  res.status(200);
+  return res.json(newMemberObj)
+
+})
+
+
 
 //-------------- CREATE AN EVENT FOR A GROUPE SPECIFIED BY ITS ID ---------------
 //-------------- CREATE AN EVENT FOR A GROUPE SPECIFIED BY ITS ID ---------------
@@ -1018,10 +1349,6 @@ router.post("/:groupId/venues", requireAuth, validateVenue, async (req, res) => 
   *************************************************************************
   */
 
-  globalVenueIdCount++
-  globalVenueId.push(globalVenueIdCount)
-  console.log(globalVenueId)
-  console.log(globalVenueIdCount)
 
   await Venue.bulkCreate([{
     groupId,

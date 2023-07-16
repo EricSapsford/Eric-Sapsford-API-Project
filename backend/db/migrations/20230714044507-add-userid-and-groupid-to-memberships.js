@@ -26,6 +26,8 @@ module.exports = {
         key: "id",
         deferrable: Deferrable.INITIALLY_DEFERRED
       },
+      onDelete: "CASCADE",
+      hooks: true
     })
     await queryInterface.addColumn(options, "groupId", {
       type: Sequelize.INTEGER,
@@ -33,7 +35,9 @@ module.exports = {
         model: "Groupes",
         key: "id",
         deferrable: Deferrable.INITIALLY_DEFERRED
-      }
+      },
+      onDelete: "CASCADE",
+      hooks: true
     })
   },
 
