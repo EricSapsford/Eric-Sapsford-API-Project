@@ -25,7 +25,6 @@ module.exports = {
       references: {
         model: "Events",
         key: "id",
-        deferrable: Deferrable.INITIALLY_DEFERRED
       },
       onDelete: "CASCADE",
       hooks: true

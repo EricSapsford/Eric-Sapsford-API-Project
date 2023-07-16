@@ -23,9 +23,19 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    eventId: DataTypes.INTEGER,
-    url: DataTypes.STRING,
-    preview: DataTypes.BOOLEAN
+    eventId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      onDelete: "CASCADE"
+    },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    preview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    }
   }, {
     sequelize,
     modelName: 'EventImage',

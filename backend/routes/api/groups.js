@@ -10,6 +10,9 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
+var globalVenueId = [1, 2, 3];
+var globalVenueIdCount = 3;
+
 //=============================== END POINTS ===============================
 
 
@@ -263,81 +266,156 @@ router.get("/current", requireAuth, async (req, res) => {
 //------------------ GET DETAILS OF A GROUP FROM AN ID -------------------
 
 router.get("/:groupId", async (req, res) => {
+
   const { groupId } = req.params;
 
-  // Groupe base
-  let groupe = await Groupe.findByPk(groupId, {
-    // raw: true;
-    include: [{
-      model: Membership,
-      attributes: [],
-      // where: { <-- because why the fuck would I need this?
-      //   userId: user.id
-      // }
-    }],
-    attributes: {
-      // ^C ^V you sweet sweet succulent siren
-      include: [
-        [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
-      ]
-    },
-    group: ["Groupe.id"]
+  // LIVING THAT BRUTAL LIFE
+  const groupe = await Groupe.findByPk(groupId, {
+    include: [
+      { model: Membership },
+      { model: User },
+    ]
   })
 
-  // Error Handler start, gross I know
-  if (groupe) {
-    groupe = groupe.toJSON(); //<-- can't have this outside of the if for reasons
-
-    //Organizer
-    let organizer = await User.findByPk(groupe.organizerId, {
-      attributes: ["id", "firstName", "lastName"]
-    })
-
-    //Venue
-    let venue = await Venue.findAll({
-      attributes: [
-        "id",
-        "groupId",
-        "address",
-        "city",
-        "state",
-        "lat",
-        "lng"
-      ],
-      where: {
-        groupId
-      }
-    })
-
-    //GroupImages
-    let groupImages = await GroupImage.findAll({
-      attributes: [
-        "id",
-        "url",
-        "preview"
-      ],
-      where: {
-        groupId: req.params.groupId
-      }
-    })
-
-    //Compile
-    groupe.GroupImages = groupImages;
-    groupe.Organizer = organizer;
-    groupe.Venues = venue;
-
-
-    // if (groupe) {
-    return res.json({
-      ...groupe
-    });
-  } else {
+  if (!groupe) {
     res.status(404);
     return res.json({
-      "message": "Groupe couldn't be found"
+      "message": "Group couldn't be found"
     })
   }
-})
+
+  let numAttending = groupe.Memberships.length;
+
+  let groupImages = await GroupImage.findAll({
+    attributes: [
+      "id",
+      "url",
+      "preview"
+    ],
+    where: {
+      groupId,
+    }
+  })
+
+  let organ = groupe.User
+  let organObj = {
+    id: organ.id,
+    firstName: organ.firstName,
+    lastName: organ.lastName
+  }
+
+
+  let venues = await Venue.findAll({
+    attributes: [
+      "id",
+      "groupId",
+      "address",
+      "city",
+      "state",
+      "lat",
+      "lng"
+    ],
+    where: {
+      groupId,
+    }
+  });
+
+  // COMPILE SPOOF
+  let spoofGroupeObj = {
+    id: groupe.id,
+    organizerId: groupe.organizerId,
+    name: groupe.name,
+    about: groupe.about,
+    type: groupe.type,
+    private: groupe.private,
+    city: groupe.city,
+    state: groupe.state,
+    createdAt: groupe.createdAt,
+    updatedAt: groupe.updatedAt,
+    numMembers: numAttending,
+    GroupImages: groupImages,
+    Organizer: organObj,
+    Venues: venues
+  }
+
+  res.status(200);
+  return res.json(spoofGroupeObj);
+
+  // HELLO FROM THE FUTURE, THIS DOESN'T WORK LIKE IT LOOKED LIKE IT DID
+  // NOW WE GOING BRUTAL
+  // // Groupe base
+  // let groupe = await Groupe.findByPk(groupId, {
+  //   // raw: true;
+  //   include: [{
+  //     model: Membership,
+  //     attributes: [],
+  //     // where: { <-- because why the fuck would I need this?
+  //     //   userId: user.id
+  //     // }
+  //   }],
+  //   attributes: {
+  //     // ^C ^V you sweet sweet succulent siren
+  //     include: [
+  //       [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
+  //     ]
+  //   },
+  //   group: ["Groupe.id"]
+  // })
+
+  // // Error Handler start, gross I know
+  // if (groupe) {
+  //   groupe = groupe.toJSON(); //<-- can't have this outside of the if for reasons
+
+  //   //Organizer
+  //   let organizer = await User.findByPk(groupe.organizerId, {
+  //     attributes: ["id", "firstName", "lastName"]
+  //   })
+
+  //   //Venue
+  //   let venue = await Venue.findAll({
+  //     attributes: [
+  //       "id",
+  //       "groupId",
+  //       "address",
+  //       "city",
+  //       "state",
+  //       "lat",
+  //       "lng"
+  //     ],
+  //     where: {
+  //       groupId
+  //     }
+  //   })
+
+  //   //GroupImages
+  //   let groupImages = await GroupImage.findAll({
+  //     attributes: [
+  //       "id",
+  //       "url",
+  //       "preview"
+  //     ],
+  //     where: {
+  //       groupId: req.params.groupId
+  //     }
+  //   })
+
+  //   //Compile
+  //   groupe.GroupImages = groupImages;
+  //   groupe.Organizer = organizer;
+  //   groupe.Venues = venue;
+
+
+  //   // if (groupe) {
+  //   return res.json({
+  //     ...groupe
+  //   });
+  // } else {
+  //   res.status(404);
+  //   return res.json({
+  //     "message": "Groupe couldn't be found"
+  //   })
+  // }
+});
 
 
 
@@ -354,29 +432,31 @@ router.get("/:groupId", async (req, res) => {
 
 router.get("/", async (req, res) => {
 
-  let groupes = await Groupe.findAll({
-    raw: true,
-    include: [{
-      model: Membership,
-      attributes: []
-    }],
-    attributes: {
-      include: [
-        // fuck for loops
-        // FUCK WHILE LOOPS
-        // sequelize.fn("COUNT", sequelize.col("Memberships.id")), "AS" "numMembers"
-        [sequelize.fn("COUNT", sequelize.col("Memberships.id")), "numMembers"]
-      ]
-    },
-    //Groupe.id <-- you dumb fuck
-    group: ["Groupe.id"]
-  });
+  let groups = await Groupe.findAll({
+    include: [
+      {
+        model: Membership,
+        attributes: [],
+      },
+      {
+        model: GroupImage,
+        attributes: [],
+      }
+    ]
+  })
 
-  // THEY SAY WE LAZY LOAD WE LAZY LOAD
+  for (let i = 0; i < groups.length; i++) {
+    let membership = await Membership.findAll({
+      where: {
+        groupId: groups[i].id
+      }
+    })
 
-  for (let index = 0; index < groupes.length; index++) {
-    // let image = await Groupe.findall(
-    let image = await Groupe.findByPk(groupes[index].id, {
+    groups[i].dataValues.numMembers = membership.length
+  }
+
+  for (let index = 0; index < groups.length; index++) {
+    let image = await Groupe.findByPk(groups[index].id, {
       raw: true,
       include: [{
         model: GroupImage,
@@ -387,18 +467,16 @@ router.get("/", async (req, res) => {
       }]
     });
 
-    groupes[index].numMembers = Number(groupes[index].numMembers);
-
     if (image) {
-      groupes[index].previewImage = image["GroupImages.url"];
+      groups[index].dataValues.previewImage = image["GroupImages.url"];
     } else {
-      groupes[index].previewImage = "preview does not exist";
+      groups[index].dataValues.previewImage = "preview does not exist";
     };
   }
 
   return res.json({
     //this feels wrong
-    Groups: groupes
+    Groups: groups
   });
 
 })
@@ -429,6 +507,7 @@ router.delete("/:groupeId", requireAuth, async (req, res) => {
   if (groupe) {
     if (groupe.organizerId === userId) {
       await groupe.destroy();
+      res.status(200)
       return res.json({
         "message": "Successfully deleted",
       })
@@ -529,6 +608,61 @@ const validateVenue = [
   handleValidationErrors
 ];
 
+//__________________________________ validator __________________________________
+
+const validateEvent = [
+  check("name")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Name is required"),
+  check("type")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Type is required"),
+  check("capacity")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Capacity is required"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Price is required"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Description is required"),
+  check("startDate")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Start date is required"),
+  check("endDate")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("End date is required"),
+  // THAT DOES IT FOR THE EXISTS CHECKS
+  check("venueId")
+    .exists({ checkFalsy: true })
+    .isIn(globalVenueId)
+    .withMessage("Venue does not exist"),
+  check("name")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 5 })
+    .withMessage("Name must be at least 5 characters"),
+  check("type")
+    .exists({ checkFalsy: true })
+    .isIn(["Online", "In person"])
+    .withMessage("Type must be Online or In person"),
+  check("capacity")
+    .exists({ checkFalsy: true })
+    .isInt()
+    .withMessage("Capacity must be an integer"),
+  // check("price")
+  //   .exists({ checkFalsy: true })
+  //   .isDecimal({ decimal_digits: 2 })
+  //   .withMessage("Price is invalid"),
+  handleValidationErrors
+];
+
 
 //------------------------------ EDIT A GROUP -----------------------------------
 //------------------------------ EDIT A GROUP -----------------------------------
@@ -586,13 +720,37 @@ router.put("/:groupId", requireAuth, validateGroupe, async (req, res) => {
 
 //============================== POST REQUESTS ==================================
 
+//-------------- CREATE AN EVENT FOR A GROUPE SPECIFIED BY ITS ID ---------------
+//-------------- CREATE AN EVENT FOR A GROUPE SPECIFIED BY ITS ID ---------------
+//-------------- CREATE AN EVENT FOR A GROUPE SPECIFIED BY ITS ID ---------------
+//-------------- CREATE AN EVENT FOR A GROUPE SPECIFIED BY ITS ID ---------------
 
-//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
-//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
-//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
-//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
 
-router.post("/:groupId/venues", requireAuth, validateVenue, async (req, res) => {
+
+router.post("/:groupId/events", requireAuth, validateEvent, async (req, res) => {
+
+  // body("startDate").custom(async value => {
+  //   const date = new Date();
+  //   let currentDay = String(date.getDate()).padStart(2, '0');
+  //   let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+  //   let currentYear = date.getFullYear();
+  //   let currentHour = String(date.getHours());
+  //   let currentMin = String(date.getMinutes());
+  //   let currentSec = String(date.getSeconds());
+  //   if (value < )
+
+  //   let currentDate = `${currentYear}-${currentMonth}-${currentDay} ${currentHour}:${currentMin}:${currentSec}`
+  // }),
+
+  // check("venueId")
+  //   .custom(async req => {
+  //     const { venueId } = req.body
+  //     const validVenue = await Venue.findByPk(venueId)
+  //     if (!validVenue) {
+  //       throw new Error();
+  //     }
+  //   })
+  //   .withMessage("Venue does not exist")
 
   // log in check
   const { user } = req;
@@ -603,10 +761,18 @@ router.post("/:groupId/venues", requireAuth, validateVenue, async (req, res) => 
     })
   }
 
-  const { address, city, state, lat, lng } = req.body
+
+  const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
 
   const userId = user.dataValues.id;
   const groupId = req.params.groupId;
+
+  /*
+  *************************************************************************
+  CURRENT USER MUST BE THE ORGANIZER OF THE GROUPE OR A MEMBER OF THE GROUP
+  WITH A STATUS OF "CO-HOST"
+  *************************************************************************
+  */
 
   let findGroupe = await Groupe.findByPk(groupId);
 
@@ -638,15 +804,145 @@ router.post("/:groupId/venues", requireAuth, validateVenue, async (req, res) => 
 
   let dog = 0;
   if (userId === findGroupe.organizerId) dog++;
-  console.log(dog);
+  // console.log(dog);
   if (userMembership.status === "co-host") dog++;
-  console.log(dog);
+  // console.log(dog);
   if (dog === 0) {
     res.status(403);
     return res.json({
       "message": "Whoa there buckeroo, that ain't yours"
     })
   }
+
+  /*
+  *************************************************************************
+  CURRENT USER MUST BE THE ORGANIZER OF THE GROUPE OR A MEMBER OF THE GROUP
+  WITH A STATUS OF "CO-HOST"
+  *************************************************************************
+  */
+
+  await Event.bulkCreate([{
+    groupId,
+    venueId,
+    name,
+    type,
+    capacity,
+    price,
+    description,
+    startDate,
+    endDate,
+  },
+  ], { validate: true })
+
+  let findNewEvent = await Event.findOne({
+    attributes: [
+      "id",
+      "groupId",
+      "venueId",
+      "name",
+      "type",
+      "capacity",
+      "price",
+      "description",
+      "startDate",
+      "endDate"
+    ],
+    where: {
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate
+    }
+  });
+
+  res.status(201);
+  return res.json(findNewEvent);
+
+});
+
+//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
+//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
+//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
+//------------ CREATE A NEW VENUE FOR A GROUPE SPECIFIED BY ITS ID --------------
+
+router.post("/:groupId/venues", requireAuth, validateVenue, async (req, res) => {
+
+  // log in check
+  const { user } = req;
+  if (!user) {
+    res.status(401);
+    return res.json({
+      "message": "Authentication Required. Forgot to log in didn't you?"
+    })
+  }
+
+  const { address, city, state, lat, lng } = req.body
+
+  const userId = user.dataValues.id;
+  const groupId = req.params.groupId;
+
+  /*
+  *************************************************************************
+  CURRENT USER MUST BE THE ORGANIZER OF THE GROUPE OR A MEMBER OF THE GROUP
+  WITH A STATUS OF "CO-HOST"
+  *************************************************************************
+  */
+
+  let findGroupe = await Groupe.findByPk(groupId);
+
+  if (!findGroupe) {
+    res.status(404);
+    return res.json({
+      "message": "Group couldn't be found"
+    })
+  }
+
+  let userMembership = await Membership.findOne({
+    where: {
+      groupId,
+      userId
+    }
+  });
+
+  if (!userMembership) {
+    res.status(403);
+    return res.json({
+      "message": "Whoa there buckeroo, that ain't yours"
+    })
+  }
+
+  // LET
+  // THAT
+  // DOG
+  // OUT
+
+  let dog = 0;
+  if (userId === findGroupe.organizerId) dog++;
+  // console.log(dog);
+  if (userMembership.status === "co-host") dog++;
+  // console.log(dog);
+  if (dog === 0) {
+    res.status(403);
+    return res.json({
+      "message": "Whoa there buckeroo, that ain't yours"
+    })
+  }
+
+  /*
+  *************************************************************************
+  CURRENT USER MUST BE THE ORGANIZER OF THE GROUPE OR A MEMBER OF THE GROUP
+  WITH A STATUS OF "CO-HOST"
+  *************************************************************************
+  */
+
+  globalVenueIdCount++
+  globalVenueId.push(globalVenueIdCount)
+  console.log(globalVenueId)
+  console.log(globalVenueIdCount)
 
   await Venue.bulkCreate([{
     groupId,
@@ -714,17 +1010,29 @@ router.post("/:groupeId/images", requireAuth, async (req, res) => {
     if (groupe.organizerId === userId) {
       if (!preview) preview = false;
 
-      const newImage = await GroupImage.create({
-        groupeId,
+      await GroupImage.bulkCreate([{
+        groupId: groupeId,
         url,
         preview
+      },
+      ], { validate: true });
+
+      // THIS ONLY WORKS SO LONG AS THE URL AS IS UNIQUE
+      const newImage = await GroupImage.findOne({
+        attributes: [
+          "id",
+          "url",
+          "preview"
+        ],
+        where: {
+          groupId: groupeId,
+          url,
+          preview
+        }
       });
 
-      return res.json({
-        id: newImage.id,
-        url: newImage.url,
-        preivew: newImage.preview
-      });
+      res.status(200);
+      return res.json(newImage);
     } else {
       res.status(403)
       return res.json({
