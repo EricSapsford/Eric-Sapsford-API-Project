@@ -137,6 +137,15 @@ router.get("/:groupId/events", async (req, res) => {
 
   const groupId = req.params.groupId;
 
+  let errHandle = await Groupe.findByPk(groupId)
+
+  if (!errHandle) {
+    res.status(404);
+    return res.json({
+      "message": "Group does not exist"
+    })
+  }
+
   let events = await Event.findAll({
     include: [
       {
@@ -684,7 +693,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
   if (!currUserMembership) {
     res.status(404);
     res.json({
-      "message": "Whoa there buckeroo, that ain't yours"
+      "message": "You there buckeroo don't have the authorization for that"
     })
   } else if (currUserMembership.status === "host" || membership.userId === currUserId) {
     await membership.destroy();
@@ -695,7 +704,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
   } else {
     res.status(403);
     return res.json({
-      "message": "Whoa there buckeroo, that ain't yours"
+      "message": "You there buckeroo don't have the authorization for that"
     })
   }
 

@@ -45,7 +45,7 @@ router.get("/:eventId/attendees", async (req, res) => {
 
   if (attendies.length === 0) {
     res.status(404);
-    return req.json({
+    return res.json({
       "message": "Event couldn't be found"
     })
   }
@@ -1018,7 +1018,7 @@ router.delete("/:eventId/attendance", requireAuth, async (req, res) => {
     await attendance.destroy();
     res.status(200);
     return res.json({
-      "message": "Successfully deleted attendance from event"
+      "message": "Successfully deleted"
     })
   } else {
     res.status(403);
