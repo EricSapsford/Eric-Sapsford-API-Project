@@ -348,15 +348,15 @@ router.get("/current", requireAuth, async (req, res) => {
       {
         model: Membership,
         attributes: [],
-        where: {
-          userId: userId
-        },
       },
       {
         model: GroupImage,
         attributes: [],
       }
     ],
+    where: {
+      organizerId: userId
+    }
   })
 
   for (let i = 0; i < groups.length; i++) {
@@ -1522,6 +1522,7 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
   const { name, about, type, private, city, state } = req.body;
   const organizerId = user.dataValues.id
 
+
   //let newGroup = //well look who doesn't need to exist?
   await Groupe.bulkCreate([{
     organizerId,
@@ -1555,14 +1556,16 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
   });
 
   let pleaseForTheLoveOfGodWhereAreYouGroupeId = pleaseForTheLoveOfGodWhereAreYouGroupe.id;
-  // create corresponding Membership
-  await Membership.bulkCreate(
-    {
-      userId: organizerId,
-      groupId: pleaseForTheLoveOfGodWhereAreYouGroupeId,
-      status: "host",
-    });
+  console.log(pleaseForTheLoveOfGodWhereAreYouGroupeId);
 
+  await Membership.bulkCreate([{
+    userId: organizerId,
+    groupId: pleaseForTheLoveOfGodWhereAreYouGroupeId,
+    status: "host",
+  },
+  ], { validate: true })
+
+  // create corresponding Membership
   res.status(201);
   return res.json(pleaseForTheLoveOfGodWhereAreYouGroupe);
   //get fucked
