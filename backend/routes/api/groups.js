@@ -923,7 +923,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 
   let groupe = await Groupe.findByPk(groupId)
 
-  console.log(groupe);
+  // console.log(groupe);
 
   if (!groupe) {
     res.status(404);
@@ -953,7 +953,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
     return res.json({
       message: "Validation Error",
       errors: {
-        status: "User couldn't be found"
+        memberId: "User couldn't be found"
       }
     })
   }
@@ -963,6 +963,8 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
       groupId: groupId
     }
   })
+
+  // console.log(membership.groupId);
 
   if (!membership) {
     res.status(400);
@@ -985,7 +987,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
   let currUserMembership = await Membership.findOne({
     where: {
       userId: userId,
-      groupId: groupId
+      groupId: membership.groupId
     }
   })
 
