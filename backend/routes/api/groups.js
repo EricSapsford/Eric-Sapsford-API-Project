@@ -1001,7 +1001,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
   let currUserMembership = await Membership.findOne({
     where: {
       userId: userId,
-      groupId: membership.groupId
+      groupId: groupId
     }
   })
 
