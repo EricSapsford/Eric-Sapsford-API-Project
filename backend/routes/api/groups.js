@@ -664,7 +664,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
     return res.json({
       message: "Validation Error",
       errors: {
-        status: "User couldn't be found"
+        memberId: "User couldn't be found"
       }
     })
   }
@@ -677,7 +677,7 @@ router.delete("/:groupId/membership", requireAuth, async (req, res) => {
   })
 
   if (!membership) {
-    res.status(400);
+    res.status(404);
     return res.json({
       "message": "Membership does not exist for this User"
     })
