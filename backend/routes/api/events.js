@@ -43,10 +43,19 @@ router.get("/:eventId/attendees", async (req, res) => {
     }
   })
 
-  if (attendies.length === 0) {
+  let eventById = await Event.findByPk(eventId);
+
+  if (!eventById) {
     res.status(404);
     return res.json({
       "message": "Event couldn't be found"
+    })
+  }
+
+  if (eventById && attendies.length === 0) {
+    res.status(404);
+    return res.json({
+      "message": "This Event exists but does not have any current attendees"
     })
   }
 
