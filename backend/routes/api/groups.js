@@ -984,6 +984,20 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
   let organToken = false;
   let hostCohost = false;
 
+  let edgecaseMembership = await Membership.findOne({
+    where: {
+      userId: userId,
+      groupId: membership.groupId
+    }
+  })
+
+  if (!edgecaseMembership) {
+    res.status(403);
+    res.json({
+      "message": "That member does not belong to this group"
+    })
+  }
+
   let currUserMembership = await Membership.findOne({
     where: {
       userId: userId,
