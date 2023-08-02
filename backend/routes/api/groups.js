@@ -218,7 +218,7 @@ router.get("/:groupId/events", async (req, res) => {
     if (image) {
       events[index].dataValues.previewImage = image["EventImages.url"];
     } else {
-      events[index].dataValues.previewImage = "preview does not exist";
+      events[index].dataValues.previewImage = false;
     };
   }
 
@@ -393,7 +393,7 @@ router.get("/current", requireAuth, async (req, res) => {
     if (image) {
       groups[index].dataValues.previewImage = image["GroupImages.url"];
     } else {
-      groups[index].dataValues.previewImage = "preview does not exist";
+      groups[index].dataValues.previewImage = false;
     };
   }
 
@@ -615,7 +615,7 @@ router.get("/", async (req, res) => {
     if (image) {
       groups[index].dataValues.previewImage = image["GroupImages.url"];
     } else {
-      groups[index].dataValues.previewImage = "preview does not exist";
+      groups[index].dataValues.previewImage = false;
     };
   }
 
