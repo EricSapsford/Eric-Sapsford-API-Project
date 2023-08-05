@@ -7,6 +7,12 @@ import { NavLink } from "react-router-dom";
 
 import Navigation from "./components/Navigation";
 import EventAndGroupeNav from "./components/EventAndGroupeNav";
+import GroupeCreate from "./components/GroupeCreate";
+import GroupDetails from "./components/GroupDetails";
+import GroupeUpdate from "./components/GroupeUpdate";
+import EventSideNav from "./components/EventAndGroupeNav/indexEvNav";
+import EventDetails from "./components/EventDetails";
+import EventCreate from "./components/EventCreate";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,16 +27,30 @@ function App() {
       {isLoaded && <Switch>
         <Route exact path="/">
           <h1>Landing Page</h1>
+          <NavLink to="/events">Events</NavLink>
           <NavLink to="/groups">Groups</NavLink>
+          <NavLink to="/groups/new">Create a Groupe</NavLink>
         </Route>
         <Route exact path="/groups">
           <EventAndGroupeNav />
         </Route>
-        <Route exact path="groups/new">
-          <h1>Create a New Groupe</h1>
+        <Route exact path="/groups/new">
+          <GroupeCreate />
         </Route>
         <Route exact path="/groups/:groupId">
-          <h1>Groupe Details</h1>
+          <GroupDetails />
+        </Route>
+        <Route path="/groups/:groupId/edit">
+          <GroupeUpdate />
+        </Route>
+        <Route exact path="/events">
+          <EventSideNav />
+        </Route>
+        <Route path="/events/:eventId">
+          <EventDetails />
+        </Route>
+        <Route path="/groups/:groupId/events/new">
+          <EventCreate />
         </Route>
 
       </Switch>}

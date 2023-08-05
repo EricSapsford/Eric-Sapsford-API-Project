@@ -19,6 +19,9 @@ module.exports = {
         name: "Event1",
         description: "Description of Event1",
         type: "Online",
+        //==============
+        private: false,
+        //==============
         capacity: 30,
         price: 10.00,
         startDate: "2022-01-17",
@@ -30,6 +33,9 @@ module.exports = {
         name: "Event2",
         description: "Description of Event2",
         type: "Online",
+        //==============
+        private: true,
+        //==============
         capacity: 40,
         price: 20.00,
         startDate: "2022-01-18",
@@ -41,6 +47,9 @@ module.exports = {
         name: "Event3",
         description: "Description of Event3",
         type: "In person",
+        //==============
+        private: false,
+        //==============
         capacity: 150,
         price: 30.00,
         startDate: "2022-01-19",

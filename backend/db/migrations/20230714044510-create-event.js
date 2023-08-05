@@ -29,6 +29,11 @@ module.exports = {
         ],
         allowNull: false
       },
+      //=================
+      private: {
+        type: Sequelize.BOOLEAN
+      },
+      //=================
       capacity: {
         type: Sequelize.INTEGER
       },

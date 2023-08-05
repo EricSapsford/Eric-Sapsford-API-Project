@@ -23,7 +23,7 @@ function GroupCard({ groupe }) {
             {groupe.about}
           </div>
           <div className="gooks">
-            //PUT NUMBER OF EVENTS IN BACKEND// ~ {groupe.private ? <span>Private</span> : <span>Public</span>}
+            //PUT NUMBER OF EVENTS IN BACKEND// · {groupe.private ? <span>Private</span> : <span>Public</span>}
           </div>
         </div>
       </div>

@@ -10,6 +10,13 @@ const { group } = require("console");
 
 
 const router = express.Router();
+// const lastGroupe = {}
+
+//======= FREEKY MIDDLEWARE TO FIX CREATE GROUPE PROBLEM IN FRONTEND =======
+
+
+
+
 //=============================== END POINTS ===============================
 
 
@@ -1246,7 +1253,10 @@ router.post("/:groupId/events", requireAuth, validateEvent, async (req, res) => 
   }
 
 
-  const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+  const { venueId, name, type, private, capacity, price, description, startDate, endDate } = req.body
+
+  // // same thing but removed venueId for frontend project
+  // const { name, type, private, capacity, price, description, startDate, endDate } = req.body
 
   const userId = user.dataValues.id;
   const groupId = req.params.groupId;
@@ -1305,11 +1315,17 @@ router.post("/:groupId/events", requireAuth, validateEvent, async (req, res) => 
   *************************************************************************
   */
 
+  const dirtyEvent = await Event.findOne({
+    order: [['id', 'DESC']],
+  });
+  const dirtyEventIdInc = dirtyEvent.dataValues.id++;
+
   await Event.bulkCreate([{
     groupId,
     venueId,
     name,
     type,
+    private,
     capacity,
     price,
     description,
@@ -1318,30 +1334,48 @@ router.post("/:groupId/events", requireAuth, validateEvent, async (req, res) => 
   },
   ], { validate: true })
 
-  let findNewEvent = await Event.findOne({
+  // let findNewEvent = await Event.findOne({
+  //   attributes: [
+  //     "id",
+  //     "groupId",
+  //     "venueId",
+  //     "name",
+  //     "type",
+  //     "private",
+  //     "capacity",
+  //     "price",
+  //     "description",
+  //     "startDate",
+  //     "endDate"
+  //   ],
+  //   where: {
+  //     venueId,
+  //     name,
+  //     type,
+  //     private,
+  //     capacity,
+  //     price,
+  //     description,
+  //     startDate,
+  //     endDate
+  //   }
+  // });
+
+  let findNewEvent = await Event.findByPk(dirtyEventIdInc, {
     attributes: [
       "id",
       "groupId",
       "venueId",
       "name",
       "type",
+      "private",
       "capacity",
       "price",
       "description",
       "startDate",
       "endDate"
-    ],
-    where: {
-      venueId,
-      name,
-      type,
-      capacity,
-      price,
-      description,
-      startDate,
-      endDate
-    }
-  });
+    ]
+  })
 
   res.status(201);
   return res.json(findNewEvent);
@@ -1547,6 +1581,14 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
   const { name, about, type, private, city, state } = req.body;
   const organizerId = user.dataValues.id
 
+  // THIS WILL ONLY WORK AS A STOPGAP
+  // WE'LL NEED TO FIND A MORE FOOLPROOF AND LOGICAL SOLUTION
+  // WHEN WE CREATE THE THE DELETE THUNK
+  const dirtyGroup = await Groupe.findOne({
+    order: [['id', 'DESC']],
+  });
+  const dirtyGroupIdInc = dirtyGroup.dataValues.id++;
+
 
   //let newGroup = //well look who doesn't need to exist?
   await Groupe.bulkCreate([{
@@ -1560,39 +1602,34 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
   },
   ], { validate: true });
 
-  let pleaseForTheLoveOfGodWhereAreYouGroupe = await Groupe.findOne({
-    where: {
-      //you
-      organizerId,
-      //cannot
-      name,
-      //hide
-      about,
-      //from
-      type,
-      //me
-      private,
-      //I
-      city,
-      //OWN
-      state,
-      //YOU
-    }
-  });
+  // WE NEED TO FIND A BETTER WAY
+  // let foundGroupe = await Groupe.findOne({
+  //   where: {
+  //     organizerId,
+  //     name,
+  //     about,
+  //     type,
+  //     private,
+  //     city,
+  //     state,
+  //   }
+  // });
 
-  let pleaseForTheLoveOfGodWhereAreYouGroupeId = pleaseForTheLoveOfGodWhereAreYouGroupe.id;
-  console.log(pleaseForTheLoveOfGodWhereAreYouGroupeId);
+  const foundGroupe = await Groupe.findByPk(dirtyGroupIdInc)
+
+  let foundGroupeId = foundGroupe.dataValues.id;
+
 
   await Membership.bulkCreate([{
     userId: organizerId,
-    groupId: pleaseForTheLoveOfGodWhereAreYouGroupeId,
+    groupId: foundGroupeId,
     status: "host",
   },
   ], { validate: true })
 
   // create corresponding Membership
   res.status(201);
-  return res.json(pleaseForTheLoveOfGodWhereAreYouGroupe);
+  return res.json(foundGroupe);
   //get fucked
 
 })

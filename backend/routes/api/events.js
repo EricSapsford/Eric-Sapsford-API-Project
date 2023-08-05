@@ -204,6 +204,19 @@ router.get("/:eventId", async (req, res) => {
   }
   );
 
+  console.log(event.dataValues.Groupe)
+
+  const organ = await Groupe.findOne({
+    include: [
+      { model: User }
+    ],
+    where: {
+      id: event.dataValues.Groupe.dataValues.organizerId
+    }
+  })
+
+  // console.log("organ", organ.dataValues.User.dataValues.firstName)
+
   if (!event) {
     res.status(404);
     return res.json({
@@ -217,6 +230,8 @@ router.get("/:eventId", async (req, res) => {
   let groupeObj = {
     id: groupe.id,
     name: groupe.name,
+    organFirst: organ.dataValues.User.dataValues.firstName,
+    organLast: organ.dataValues.User.dataValues.lastName,
     private: groupe.private,
     city: groupe.city,
     state: groupe.state
@@ -256,6 +271,7 @@ router.get("/:eventId", async (req, res) => {
     name: event.name,
     description: event.description,
     type: event.type,
+    private: event.private,
     capacity: event.capacity,
     price: event.price,
     startDate: event.startDate,

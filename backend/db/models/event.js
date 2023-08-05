@@ -48,6 +48,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("Online", "In person"),
       allowNull: false
     },
+    //========================
+    private: DataTypes.BOOLEAN,
+    //========================
     capacity: DataTypes.INTEGER,
     price: DataTypes.DECIMAL,
     startDate: DataTypes.DATE,

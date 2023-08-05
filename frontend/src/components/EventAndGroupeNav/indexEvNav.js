@@ -2,19 +2,16 @@ import React from "react";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import * as groupeActions from "../../store/groupes";
 import * as eventActions from "../../store/events";
-import GroupCard from "./GroupeCard";
+import EventCard from "./EventCard";
 
-function EventAndGroupeNav() {
+function EventSideNav() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(groupeActions.getAllGroupesThunk());
-  }, [dispatch])
-  useEffect(() => {
     dispatch(eventActions.getAllEventsThunk())
   }, [dispatch])
+
   useEffect(() => {
     dispatch(eventActions.getOneEventThunk(3))
   }, [dispatch])
@@ -26,10 +23,10 @@ function EventAndGroupeNav() {
 
   // onClick={getAll}
 
-  const groupsState = useSelector((state) => (state.groups ? state.groups : {}))
+  const eventState = useSelector(state => (state.events))
 
   // console.log("groupsState", groupsState.allGroups)
-  const groupsStateArr = Object.values(groupsState.allGroups)
+  const eventStateArr = Object.values(eventState.allEvents)
   // console.log("array", groupsStateArr)
 
   return (
@@ -44,12 +41,12 @@ function EventAndGroupeNav() {
           </NavLink>
         </div>
         <div className="jokeText">
-          <span>Groups on MeetUP</span>
+          <span>Events on MeetUP</span>
         </div>
         <div className="cards">
-          {groupsStateArr.map((groupe) => (
-            <div key={groupe.id}>
-              <GroupCard groupe={groupe} />
+          {eventStateArr.map((event) => (
+            <div key={event.id}>
+              <EventCard event={event} />
             </div>
           ))}
         </div>
@@ -59,4 +56,4 @@ function EventAndGroupeNav() {
 
 }
 
-export default EventAndGroupeNav
+export default EventSideNav
