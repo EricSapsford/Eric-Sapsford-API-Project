@@ -79,7 +79,7 @@ function GroupDetails() {
     hideJoin = false;
   }
 
-  let hideCRUD;
+  let hideCRUD = true;
   if (!sessionUser) {
     hideCRUD = true;
   } else if (sessionUserId === organizerId) {
