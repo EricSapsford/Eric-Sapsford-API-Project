@@ -121,6 +121,7 @@ export const createGroupeThunk = (myCreatedGroupe) => async (dispatch) => {
     const preview = true;
     const imgRes = await csrfFetch(`/api/groups/${groupeId + 1}/images`, {
       // I DON'T KNOW WHY, I DON'T KNOW HOW, BUT IF YOU TAKE ^ THIS OUT, EVERYTHING BREAKS.
+      // I DO KNOW WHY NOW, AND IT STILL NEEDS TO BE THERE
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -86,7 +86,7 @@ function EventCreate() {
       console.log("thunk try", res)
       if (res.id) {
         await dispatch(eventActions.getOneEventThunk(3))
-        history.push(`/events/${res.id}`);
+        history.push(`/events/${res.id + 1}`);
       } else {
         return res;
       }

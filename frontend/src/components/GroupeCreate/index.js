@@ -78,6 +78,7 @@ function GroupeCreate() {
         history.push(`/groups/${res.id + 1}`);
         // IF YOU EVEN THINK OF REMOVING ^ THIS EVERYTHING BREAKS, DON'T TOUCH IT
         // BUT ALSO PROBABLY DON'T REPLICATE IT. IT SHOULDN'T WORK. IT JUST DOES
+        // I KNOW WHY THIS WORKS AND IT DOES NEED TO BE THERE
       } else {
         return res;
       }
