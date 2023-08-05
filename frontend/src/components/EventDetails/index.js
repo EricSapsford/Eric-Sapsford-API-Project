@@ -5,6 +5,7 @@ import * as eventActions from "../../store/events";
 import * as groupActions from "../../store/groupes"
 import OpenModalButton from "../OpenModalButton";
 import "./EventDetails.css"
+import DeleteEventModal from "../DeleteEventModal";
 
 
 function EventDetails() {
@@ -47,10 +48,12 @@ function EventDetails() {
   // // const organId = useSelector(state => state.groups.allGroups[groupeId].organizerId)
   // // const groupeImgArr = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : {})
 
-  const organId = gROUp.organizerId
+  const organId = event.Group.organId
+  // console.log("OID", organId)
   // console.log("organId", organId)
   // const organ = singleGroup.Organizer;
   const organFirst = event.Group.organFirst
+  // console.log("organFirst", organFirst)
   const organLast = event.Group.organLast
   // if (organ) {
   //   organFirst = singleGroup.Organizer.firstName;
@@ -178,13 +181,12 @@ function EventDetails() {
         {/* <div className="Location">{groupe.city}, {groupe.state}</div> */}
 
         {hideUD ? null : <div className="CRUD">
-          {/* <OpenModalButton
+          <button>Update</button>
+          <OpenModalButton
             className="CRUD"
             buttonText="Delete"
-            modalComponent={<DeleteGroupeModal groupId={groupId} />}
-          /> */}
-          <button>Update</button>
-          <button>Delete</button>
+            modalComponent={<DeleteEventModal eventId={eventId} />}
+          />
         </div>
         }
 

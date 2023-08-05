@@ -119,7 +119,7 @@ function EventCreate() {
                 name="name"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
-                placeholder="What is your group name? Keep it under 60...or else."
+                placeholder="What is your event name?"
                 required
               />
             </div>

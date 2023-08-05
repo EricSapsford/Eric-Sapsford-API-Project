@@ -162,6 +162,22 @@ export const createEventThunk = (myCreatedEvent) => async (dispatch) => {
   }
 }
 
+export const deleteEventThunk = (eventId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/events/${eventId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (res.ok) {
+    const succ = await res.json();
+    dispatch(deleteEvent(eventId));
+    return succ
+  } else {
+    const errors = await res.json();
+    return errors;
+  }
+}
+
 //----------------------------------- REDUCER -----------------------------------
 //----------------------------------- REDUCER -----------------------------------
 //----------------------------------- REDUCER -----------------------------------
@@ -194,22 +210,22 @@ const eventReducer = (state = initialState, action) => {
     }
 
     case CREATE_EVENT: {
-      console.log("hello from create event thunk")
-      console.log(action);
+      // console.log("hello from create event thunk")
+      // console.log(action);
       const newState = { ...state }
       newState.allEvents[action.event.id] = action.event
       return newState
     }
 
     case CREATE_EVENT_IMAGE: {
-      console.log("hello from create event image thunk")
+      // console.log("hello from create event image thunk")
       const newState = { ...state, singleEvent: { EventImages: [] } }
       newState.singleEvent.EventImages.push(action.img)
       return newState;
     }
 
     case DELETE_EVENT: {
-      const newState = { ...state, allEvents: { ...state.allEvents }, singleEvent: { ...state.singleEvent } }
+      const newState = { ...state, allEvents: {} }
       delete newState.allEvents[action.eventId]
       return newState;
     }

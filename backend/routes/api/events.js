@@ -230,6 +230,7 @@ router.get("/:eventId", async (req, res) => {
   let groupeObj = {
     id: groupe.id,
     name: groupe.name,
+    organId: groupe.organizerId,
     organFirst: organ.dataValues.User.dataValues.firstName,
     organLast: organ.dataValues.User.dataValues.lastName,
     private: groupe.private,
