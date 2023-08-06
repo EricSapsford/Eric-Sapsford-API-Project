@@ -426,8 +426,11 @@ router.get("/:groupId", async (req, res) => {
     include: [
       { model: Membership },
       { model: User },
+      { model: Event }
     ]
   })
+
+  console.log()
 
   if (!groupe) {
     res.status(404);
@@ -485,6 +488,7 @@ router.get("/:groupId", async (req, res) => {
     createdAt: groupe.createdAt,
     updatedAt: groupe.updatedAt,
     numMembers: numAttending,
+    numEvents: groupe.dataValues.Events.length,
     GroupImages: groupImages,
     Organizer: organObj,
     Venues: venues

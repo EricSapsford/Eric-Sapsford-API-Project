@@ -20,7 +20,6 @@ function GroupDetails() {
     dispatch(groupeActions.getAllGroupesThunk());
   }, [dispatch]);
 
-
   const sessionUser = useSelector(state => state.session.user ? state.session.user : {});
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   const groupe = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
@@ -89,53 +88,61 @@ function GroupDetails() {
 
   return (
     <>
-      <div>
-        ← <NavLink to="/groups">Groups</NavLink>
+      <div className="GDnavParent">
+        <div className="GDnavChild">
+          <div>
+            ← <NavLink className="GDnavLink" to="/groups" style={{ textDecoration: "none", color: "brown", }}>Groups</NavLink>
+          </div>
+        </div>
       </div>
 
-      <div className="Card">
-        <div className="groupImg">
-          {imgUrl ? <img className="groupImg" src={imgUrl}></img> : <img className="groupImg" src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"></img>}
-        </div>
-        <div className="Detes">
-          <div className="Name">{groupe.name}</div>
-          <div className="Location">{groupe.city}, {groupe.state}</div>
-          <div className="eventAndIsPrivate">//# OF EVENTS COMING SOON!// · {groupe.private ? <span>Private</span> : <span>Public</span>}</div>
-          <div className="Organizer">Organized by: {organFirst} {organLast}</div>
-        </div>
 
-        {hideJoin ? null : <div className="join">
-          <button disabled="true">Join this group</button>
+      <div className="GDcard">
+        <div className="GDgroupImgDiv">
+          {imgUrl ? <img className="GDgroupImg" src={imgUrl}></img> : <img className="groupImg" src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"></img>}
         </div>
-        }
+        <div className="GDdetesDiv">
+          <div className="GDdetes">
+            <div className="GDname">{groupe.name}</div>
+            <div className="GDlocation">{groupe.city}, {groupe.state}</div>
+            <div className="GDeventAndIsPrivate">{groupe.numEvents} {groupe.numEvents === 1 ? "event" : "events"}· {groupe.private ? <span>Private</span> : <span>Public</span>}</div>
+            <div className="GDorganizer">Organized by: {organFirst} {organLast}</div>
+          </div>
 
-        {hideCRUD ? null : <div className="CRUD">
-          <NavLink to={`/groups/${groupId}/events/new`}>
-            <button className="CRUD">Create event</button>
-          </NavLink>
-          <NavLink to={`/groups/${groupId}/edit`}>
-            <button className="CRUD">Update</button>
-          </NavLink>
-          <OpenModalButton
-            className="CRUD"
-            buttonText="Delete"
-            modalComponent={<DeleteGroupeModal groupId={groupId} />}
-          />
+          <div className="JCRUDparent">
+            <div className="JCRUDchild">
+              {hideJoin ? null : <div>
+                <button className="join" disabled={true}>Join this group</button>
+              </div>
+              }
+
+              {hideCRUD ? null : <div>
+                <NavLink to={`/groups/${groupId}/events/new`}>
+                  <button className="CRUD">Create event</button>
+                </NavLink>
+                <NavLink to={`/groups/${groupId}/edit`}>
+                  <button className="CRUD">Update</button>
+                </NavLink>
+                <OpenModalButton
+                  className="CRUD"
+                  buttonText="Delete"
+                  modalComponent={<DeleteGroupeModal groupId={groupId} />}
+                />
+              </div>
+              }
+            </div>
+          </div>
         </div>
-        }
-
       </div>
-      <div className="lowerHalf">
-        <div>
-          <h2>Organizer</h2>
+      <div className="GDlowerHalf">
+        <div className="GDlowerHalfDiv">
+          <div className="GDorgan">Organizer</div>
+          <div className="actualGDorgan">{organFirst} {organLast}</div>
+          <div className="GDabout">What we're about</div>
+          <div className="actualGDabout">{groupe.about}</div>
+          <div>Upcoming Events (#)</div>
+          <div> Past Events (#)</div>
         </div>
-        <div>{organFirst} {organLast}</div>
-        <div>
-          <h2>What we're about</h2>
-        </div>
-        <div>{groupe.about}</div>
-        <div>Upcoming Events (#)</div>
-        <div> Past Events (#)</div>
       </div>
     </>
   )

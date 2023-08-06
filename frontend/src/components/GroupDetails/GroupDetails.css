@@ -1,0 +1,97 @@
+.GDcard {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.GDgroupImg {
+  width: 600px;
+  height: 400px;
+  object-fit: cover;
+  margin: 20px 20px;
+  border-radius: 3em;
+}
+
+.GDdetesDiv,
+.GDlowerHalfDiv {
+  margin: 20px 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.GDnavLink {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: large;
+}
+
+.GDname,
+.GDorgan,
+.GDabout {
+  font-size: x-large;
+  font-weight: bold;
+  color: brown;
+  margin-bottom: 10px;
+}
+
+.GDlocation,
+.GDeventAndIsPrivate,
+.GDorganizer {
+  color: brown;
+  margin-bottom: 15px;
+}
+
+.actualGDabout,
+.actualGDorgan {
+  margin-bottom: 30px;
+}
+
+
+.GDlowerHalf {
+  background-color: tan;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-radius: 3em;
+}
+
+.GDnavParent {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.GDlowerHalfDiv,
+.GDnavChild {
+  width: 900px;
+}
+
+.JCRUDparent {
+  position: relative;
+  height: 233px;
+}
+
+.JCRUDchild {
+  position: absolute;
+  bottom: 0;
+}
+
+.join {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+}
+
+.join:disabled {
+  background-color: grey;
+  box-shadow: none;
+  color: black;
+}
+
+.CRUD {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  margin-right: 10px;
+  cursor: pointer;
+}

@@ -13,6 +13,7 @@ import GroupeUpdate from "./components/GroupeUpdate";
 import EventSideNav from "./components/EventAndGroupeNav/indexEvNav";
 import EventDetails from "./components/EventDetails";
 import EventCreate from "./components/EventCreate";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,10 +27,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Switch>
         <Route exact path="/">
-          <h1>Landing Page</h1>
-          <NavLink to="/events">Events</NavLink>
-          <NavLink to="/groups">Groups</NavLink>
-          <NavLink to="/groups/new">Create a Groupe</NavLink>
+          <LandingPage />
         </Route>
         <Route exact path="/groups">
           <EventAndGroupeNav />

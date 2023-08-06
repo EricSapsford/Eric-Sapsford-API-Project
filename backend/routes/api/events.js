@@ -227,6 +227,21 @@ router.get("/:eventId", async (req, res) => {
   let numAttending = event.Attendances.length;
 
   let groupe = event.Groupe;
+  // console.log(groupe)
+  let groupId = event.Groupe.dataValues.id
+
+  let groupImages = await GroupImage.findAll({
+    attributes: [
+      "id",
+      "url",
+      "preview"
+    ],
+    where: {
+      groupId,
+    }
+  })
+
+
   let groupeObj = {
     id: groupe.id,
     name: groupe.name,
@@ -235,7 +250,8 @@ router.get("/:eventId", async (req, res) => {
     organLast: organ.dataValues.User.dataValues.lastName,
     private: groupe.private,
     city: groupe.city,
-    state: groupe.state
+    state: groupe.state,
+    images: groupImages
   }
 
   let venue = event.Venue;

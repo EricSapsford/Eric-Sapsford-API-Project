@@ -16,38 +16,49 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <div className="sessionLinks">
         <ProfileButton user={sessionUser} />
-      </li>
+      </div>
     );
   } else {
     sessionLinks = (
-      <li>
-        <OpenModalButton
-          buttonText="Log In"
-          modalComponent={<LoginFormModal />}
-        />
-        {/* <OpenModalButton
-          buttonText="Log in as Demo User"
-          modalComponent={<LoginFormDemo />}
-        /> */}
-        <OpenModalButton
-          buttonText="Sign Up"
-          modalComponent={<SignupFormModal />}
-        />
-      </li>
+      <div className="sessionLinks">
+        <div className="sessionLinksUnderDiv">
+          <OpenModalButton
+            buttonText="Log In"
+            modalComponent={<LoginFormModal />}
+          />
+        </div>
+        <div className="sessionLinksUnderDiv">
+          <OpenModalButton
+            buttonText="Sign Up"
+            modalComponent={<SignupFormModal />}
+          />
+        </div>
+      </div>
     );
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">
-          Home
-        </NavLink>
-      </li>
-      {isLoaded && sessionLinks}
-    </ul>
+    <>
+      <div className="navigationHead">
+        <div className="navigationAnother">
+          <NavLink exact to="/" style={{ textDecoration: "none", color: "darkred", fontWeight: "bolder" }}>
+            <div className="meetSup">
+              <div className="meetSupIcon">
+                <i class="fa-solid fa-utensils fa-2xl" style={{ color: "darkred" }}></i>
+              </div>
+              <div className="meetSupWord">
+                MeetSup
+              </div>
+            </div>
+          </NavLink>
+        </div>
+        <div className="navigationLinksDiv">
+          {isLoaded && sessionLinks}
+        </div>
+      </div>
+    </>
   );
 }
 

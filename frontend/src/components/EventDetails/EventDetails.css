@@ -1,0 +1,158 @@
+.EDlowerHalfDiv {
+  display: flex;
+  justify-content: center;
+  background-color: tan;
+  border-radius: 3em;
+  padding: 40px 40px;
+  margin-top: 40px;
+  height: 100%;
+}
+
+.EDflexDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.EDimg {
+  /* width: 600px;
+  height: 400px; */
+  width: 95%;
+  height: 90%;
+  object-fit: cover;
+  margin: 0 20px;
+  border-radius: 3em;
+}
+
+.eventImg {
+  margin-right: 20px;
+}
+
+.eventImg,
+.EDrightCards {
+  width: 50%;
+  height: 50%;
+}
+
+.EDgroupeImage {
+  width: fit-content;
+}
+
+.EDgroupImg {
+  width: 30%;
+  height: 30%;
+  /* object-fit: cover; */
+  /* margin: 20px 5px; */
+  border-radius: 15px;
+  margin-right: 15px;
+}
+
+.groupeDetes {
+  display: flex;
+  flex-direction: row;
+}
+
+.EDnavLink,
+.EDstartEndWords,
+.EDpriceWords,
+.EDtypeWords,
+.EDabout,
+.EDheader {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: brown;
+}
+
+.EDheaderNav {
+  text-decoration: none;
+}
+
+.EDgroupeName {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.EDIsPrivate {
+  font-size: small;
+}
+
+.EDName {
+  font-weight: bold;
+  font-size: x-large;
+  margin: 20px 0;
+}
+
+.EDgroupCard {
+  background-color: white;
+  padding: 20px 15px;
+  border-radius: 1em;
+  margin-bottom: 25px;
+}
+
+.EDrightLowerCard {
+  background-color: white;
+  padding: 20px 15px;
+  border-radius: 1em;
+}
+
+.EDgroupCard:hover {
+  background-color: lightgray;
+}
+
+.EDstartEnd,
+.EDprice,
+.EDtypeButtons {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.EDstartEndIcon {
+  margin-top: 15px;
+  margin-right: 14px;
+}
+
+.EDpriceIcon {
+  margin-right: 19px;
+  margin-top: 3px;
+}
+
+.EDtypeIcon {
+  margin-right: 10px;
+  margin-top: 8px;
+}
+
+.EDtypeWords {
+  margin-top: 6px;
+  margin-right: 10px;
+}
+
+.EDCRUDdiv {
+  width: 100%;
+}
+
+.EDCRUD {
+  float: right;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.EDupdateButton {
+  color: black;
+  padding: 10px 10px;
+  background-color: gray;
+  /* box-shadow: 3px 3px black; */
+  border: 2px solid black;
+  margin-right: 20px;
+}
+
+.EDdeleteButton {
+  cursor: pointer;
+}
+
+.EDabout {
+  padding-left: 20px;
+}
+
+.EDheader {
+  padding-left: 60px;
+}

@@ -1,3 +1,42 @@
 .hidden {
   display: none
 }
+
+.navigationHead {
+  display: flex;
+  flex-direction: row;
+  background-color: tan;
+}
+
+.navigationLinksDiv {
+  width: 100%;
+}
+
+.sessionLinks {
+  float: right;
+  margin-right: 25px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+}
+
+.sessionLinksUnderDiv {
+  margin: 0 20px;
+}
+
+.meetSup {
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
+}
+
+.meetSupWord {
+  font-size: xx-large;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.meetSupIcon {
+  margin: 13px 0;
+  margin-left: 10px;
+}

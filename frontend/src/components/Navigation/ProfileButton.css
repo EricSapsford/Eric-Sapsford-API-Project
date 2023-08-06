@@ -1,0 +1,37 @@
+.hidden {
+  display: none;
+}
+
+.profileButton {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#dropdownDiv {
+  position: absolute;
+  background-color: darkslategray;
+  top: 90px;
+  right: 40px;
+  padding: 20px;
+  border-radius: 1em;
+}
+
+.riggle {
+  padding: 5px 0;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: lightcoral;
+  font-weight: bolder;
+}
+
+.riggleButton {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  margin-right: 10px;
+  cursor: pointer;
+}

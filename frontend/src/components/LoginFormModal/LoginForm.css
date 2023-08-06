@@ -27,6 +27,12 @@
   padding: 10px 0;
 }
 
+#loginButtonModal:disabled {
+  background-color: grey;
+  box-shadow: none;
+  color: black;
+}
+
 .eros {
   color: red;
   font-weight: bolder;

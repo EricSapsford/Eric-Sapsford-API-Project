@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -11,6 +11,17 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  const [disabled, setDisabled] = useState({})
+
+  useEffect(() => {
+
+
+    if (credential.length < 4) setDisabled(true)
+    if (password.length < 6) setDisabled(true)
+
+    if (credential.length >= 4 && password.length >= 6) setDisabled(false)
+
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +81,7 @@ function LoginFormModal() {
               placeholder="Password"
             />
           </label>
-          <button className="LMbutton" id="loginButtonModal" type=" submit">Log In</button>
+          <button className="LMbutton" id="loginButtonModal" type=" submit" disabled={disabled}>Log In</button>
           {/* <OpenModalButton
           buttonText="Log in as Demo User"
           modalComponent={<LoginFormDemo />}
