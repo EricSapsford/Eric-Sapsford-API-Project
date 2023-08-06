@@ -1,0 +1,27 @@
+.DMheader {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+.modalDiv {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5em;
+}
+
+.redButton,
+.greyButton {
+  margin: 10px 0;
+  padding: 10px 0;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+}
+
+.redButton {
+  background-color: lightcoral;
+}
+
+.DMmessage {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-bottom: 5px;
+}

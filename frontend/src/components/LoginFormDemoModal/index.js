@@ -1,54 +1,52 @@
 import React, { useState } from "react";
-import * as eventActions from "../../store/events"
+import * as sessionsActions from "../../store/session"
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useParams, useHistory } from "react-router-dom";
-import "./DeleteEventModal.css"
+import "./LoginFormDemo.css"
 
-function DeleteEventModal({ eventId }) {
+function LoginFormDemo() {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const { closeModal } = useModal();
   const [errors, setErrors] = useState({});
 
-  const deleteIt = (e) => {
+  const credential = "Demo-lition"
+  const password = "password"
+
+  const login = (e) => {
     e.preventDefault();
     setErrors({});
-    return dispatch(eventActions.deleteEventThunk(eventId))
+    return dispatch(sessionsActions.login({ credential, password }))
       .then(closeModal)
-      .then(() => {
-        history.push("/events")
-      })
       .catch(async (res) => {
-        const data = await res.json()
+        const data = await res.json();
         if (data && data.errors) {
           setErrors(data.errors);
-          console.log("you got errors son", data)
         }
       });
-  };
+  }
 
   return (
     <>
-      <div className="modalDiv">
-        <h1 className="DMheader">Confirm Delete</h1>
-        <div className="DMmessage">Are you sure you want to remove this event?</div>
+      <h1>Log in as Demo User?</h1>
+      <div>
         <button
           className="redButton"
-          onClick={deleteIt}
+          onClick={login}
         >
-          Yes (Delete Event)
+          Yes Please!
         </button>
         <button
           className="greyButton"
           onClick={closeModal}
         >
-          No (Keep Event)
+          No Thank You!
         </button>
       </div>
     </>
   )
 }
 
-export default DeleteEventModal
+export default LoginFormDemo

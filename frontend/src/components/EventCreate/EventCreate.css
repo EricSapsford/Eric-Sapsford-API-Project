@@ -1,0 +1,37 @@
+.ereader,
+.name {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.porSelDiv,
+.porDatDiv,
+.porImgDiv,
+.porDescDiv {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-bottom: 1px solid grey;
+}
+
+.actualCapacityInput,
+.actualPriceInput,
+.actualDateInput,
+.actualDescriptionTextArea {
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 5px;
+}
+
+.headerSpace {
+  margin-top: 10px;
+}
+
+.submitButton {
+  margin: 20px 0;
+}
+
+.actualSubmitButton {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+}

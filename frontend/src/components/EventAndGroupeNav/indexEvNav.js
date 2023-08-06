@@ -4,6 +4,8 @@ import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as eventActions from "../../store/events";
 import EventCard from "./EventCard";
+import "./EventAndGroupeNav.css"
+import "./event.css"
 
 function EventSideNav() {
   const dispatch = useDispatch();
@@ -33,17 +35,20 @@ function EventSideNav() {
     <>
       <div className="allAndEverything">
         <div className="EventsAndGroupeLinks">
-          <NavLink exact to="/groups">
-            <h2>Groups</h2>
-          </NavLink>
-          <NavLink exact to="/events">
+          <NavLink
+            exact to="/events"
+            className="NarEventNav"
+          >
             <h2>Events</h2>
+          </NavLink>
+          <NavLink exact to="/groups" className="NarGroupNav">
+            <h2>Groups</h2>
           </NavLink>
         </div>
         <div className="jokeText">
-          <span>Events on MeetUP</span>
+          <span>Events on MeetSup</span>
         </div>
-        <div className="cards">
+        <div className="EGcards">
           {eventStateArr.map((event) => (
             <div key={event.id}>
               <EventCard event={event} />

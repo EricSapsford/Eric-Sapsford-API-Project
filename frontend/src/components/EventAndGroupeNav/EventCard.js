@@ -3,37 +3,43 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 // import { useSelector, useDispatch } from "react-redux";
 // import * as groupeActions from "../../store/groupes";
-import "./Card.css"
+import "./EventCard.css"
 
 function EventCard({ event }) {
 
   let startDateRaw = event.startDate
   let date = startDateRaw.slice(0, 10)
 
-  let timeRaw = startDateRaw.slice(11, 22)
+  let timeRaw = startDateRaw.slice(11, 16)
 
   return (
-    <NavLink to={`/events/${event.id}`}>
-      <div>
-        <div className="image">
-          <img src={event.previewImage ? event.previewImage : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"} alt="Event Image" />
-        </div>
-        <div className="iddlybits">
-          <div className="dateAndTime">
-            {date} · {timeRaw}
+    <div className="OOverDiv">
+      <div className="SoManyDiv">
+        <NavLink to={`/events/${event.id}`} style={{ textDecoration: "none", color: "brown", }}>
+          <div className="WhyOverDiv">
+            <div className="CardOverDiv">
+              <div className="CimageDiv">
+                <img className="Cimage" src={event.previewImage ? event.previewImage : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"} alt="Event Image" />
+              </div>
+              <div className="iddlybits">
+                <div className="EdateAndTime">
+                  {date} · {timeRaw}
+                </div>
+                <div className="Ename">
+                  {event.name}
+                </div>
+                <div className="Elocation">
+                  {event.Groupe.city}, {event.Groupe.state}
+                </div>
+              </div>
+            </div>
+            <div className="Eblurb">
+              {event.description ? <div>{event.description}</div> : <div>ADD DESCRIPTION TO GET ALL EVENTS ENDPOINT IN DATABASE</div>}
+            </div>
           </div>
-          <div className="name">
-            {event.name}
-          </div>
-          <div className="location">
-            {event.Groupe.city}, {event.Groupe.state}
-          </div>
-          <div className="blurb">
-            {event.description ? <div>{event.description}</div> : <div>ADD DESCRIPTION TO GET ALL EVENTS ENDPOINT IN DATABASE</div>}
-          </div>
-        </div>
+        </NavLink>
       </div>
-    </NavLink>
+    </div>
   )
 }
 

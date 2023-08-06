@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import * as groupeActions from "../../store/groupes";
 import * as eventActions from "../../store/events";
 import GroupCard from "./GroupeCard";
+import "./EventAndGroupeNav.css"
+import "./group.css"
 
 function EventAndGroupeNav() {
   const dispatch = useDispatch();
@@ -36,17 +38,23 @@ function EventAndGroupeNav() {
     <>
       <div className="allAndEverything">
         <div className="EventsAndGroupeLinks">
-          <NavLink exact to="/groups">
-            <h2>Groups</h2>
-          </NavLink>
-          <NavLink exact to="/events">
+          <NavLink
+            exact to="/events"
+            className="NurEventNav"
+          >
             <h2>Events</h2>
+          </NavLink>
+          <NavLink
+            exact to="/groups"
+            className="NurGroupNav"
+          >
+            <h2>Groups</h2>
           </NavLink>
         </div>
         <div className="jokeText">
-          <span>Groups on MeetUP</span>
+          <span>Groups on MeetSup</span>
         </div>
-        <div className="cards">
+        <div className="EGcards">
           {groupsStateArr.map((groupe) => (
             <div key={groupe.id}>
               <GroupCard groupe={groupe} />

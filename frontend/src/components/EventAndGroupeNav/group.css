@@ -1,0 +1,13 @@
+.NurGroupNav {
+  color: teal;
+  cursor: default
+}
+
+.NurEventNav {
+  color: grey;
+  text-decoration: none;
+}
+
+.NurEventNav:hover {
+  text-decoration: underline;
+}

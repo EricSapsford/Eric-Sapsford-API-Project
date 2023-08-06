@@ -3,6 +3,7 @@ import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
+// import LoginFormDemo from "../LoginFormDemoModal";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -24,33 +25,67 @@ function LoginFormModal() {
       });
   };
 
+  const login = (e) => {
+    e.preventDefault();
+    setErrors({});
+    let credential = "Demo-lition"
+    let password = "password"
+    return dispatch(sessionActions.login({ credential, password }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  }
+
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
-      </form>
+      <div className="LMformDiv">
+        <h1 className="LMheader">Log In</h1>
+        <form className="LMfomr" onSubmit={handleSubmit}>
+          {errors.credential && (
+            <p className="eros">{errors.credential}</p>
+          )}
+          <label>
+            <input
+              className="LMinput"
+              type="text"
+              size={40}
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+              required
+              placeholder="Username or Email"
+            />
+          </label>
+          <label>
+            <input
+              className="LMinput"
+              type="password"
+              size={40}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Password"
+            />
+          </label>
+          <button className="LMbutton" id="loginButtonModal" type=" submit">Log In</button>
+          {/* <OpenModalButton
+          buttonText="Log in as Demo User"
+          modalComponent={<LoginFormDemo />}
+        /> */}
+          <p className="demoP">
+            <button
+              className="LMbutton"
+              id="demoUser"
+              onClick={login}
+            >
+              Demo User
+            </button>
+          </p>
+        </form>
+      </div >
     </>
   );
 }

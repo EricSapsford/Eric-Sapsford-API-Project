@@ -181,7 +181,7 @@ function EventDetails() {
         {/* <div className="Location">{groupe.city}, {groupe.state}</div> */}
 
         {hideUD ? null : <div className="CRUD">
-          <button>Update</button>
+          <button disabled="true">Update</button>
           <OpenModalButton
             className="CRUD"
             buttonText="Delete"

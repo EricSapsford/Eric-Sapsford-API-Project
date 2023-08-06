@@ -1,0 +1,15 @@
+.NarEventNav {
+  color: teal;
+  cursor: default;
+  text-decoration: underline;
+}
+
+.NarGroupNav {
+  color: grey;
+  text-decoration: none;
+}
+
+.NarGroupNav:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -5,10 +5,13 @@ import ProfileButton from "./ProfileButton";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import * as sessionActions from "../../store/session"
 import "./Navigation.css";
+import LoginFormDemo from "../LoginFormDemoModal";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+
 
   let sessionLinks;
   if (sessionUser) {
@@ -24,6 +27,10 @@ function Navigation({ isLoaded }) {
           buttonText="Log In"
           modalComponent={<LoginFormModal />}
         />
+        {/* <OpenModalButton
+          buttonText="Log in as Demo User"
+          modalComponent={<LoginFormDemo />}
+        /> */}
         <OpenModalButton
           buttonText="Sign Up"
           modalComponent={<SignupFormModal />}

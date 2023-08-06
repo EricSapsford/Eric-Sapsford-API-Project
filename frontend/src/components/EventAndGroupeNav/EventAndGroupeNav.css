@@ -1,0 +1,24 @@
+.allAndEverything {
+  text-align: center;
+}
+
+.EventsAndGroupeLinks {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.NurEventNav,
+.NurGroupNav,
+.NarGroupNav,
+.NarEventNav {
+  margin: 0 10px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+}
+
+.jokeText {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}

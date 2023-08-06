@@ -593,6 +593,10 @@ router.get("/", async (req, res) => {
       {
         model: GroupImage,
         attributes: [],
+      },
+      {
+        model: Event,
+        attributes: [],
       }
     ]
   })
@@ -605,6 +609,15 @@ router.get("/", async (req, res) => {
     })
 
     groups[i].dataValues.numMembers = membership.length
+  }
+
+  for (let j = 0; j < groups.length; j++) {
+    let event = await Event.findAll({
+      where: {
+        groupId: groups[j].id
+      }
+    })
+    groups[j].dataValues.numEvents = event.length
   }
 
   for (let index = 0; index < groups.length; index++) {

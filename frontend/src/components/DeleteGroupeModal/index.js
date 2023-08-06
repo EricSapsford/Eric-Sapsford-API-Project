@@ -40,8 +40,8 @@ function DeleteGroupeModal({ groupId }) {
   return (
     <>
       <div className="modalDiv">
-        <h1>Confirm Delete</h1>
-        <div>Are you sure you want to remove this group?</div>
+        <h1 className="DMheader">Confirm Delete</h1>
+        <div className="DMmessage">Are you sure you want to remove this group?</div>
         <button
           className="redButton"
           onClick={deleteIt}

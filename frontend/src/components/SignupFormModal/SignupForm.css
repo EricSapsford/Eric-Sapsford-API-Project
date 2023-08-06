@@ -1,0 +1,31 @@
+.SFform {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5em;
+}
+
+.SFheader {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+
+.SFinput,
+.SFbutton {
+  margin: 8px;
+  padding: 5px;
+}
+
+#SFMbutton:disabled {
+  background-color: grey;
+  box-shadow: none;
+  color: black;
+}
+
+
+#SFMbutton {
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  padding: 10px 0;
+}

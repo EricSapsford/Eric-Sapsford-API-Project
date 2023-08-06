@@ -439,6 +439,7 @@ router.get("/", validatePaginatorAndQueries, async (req, res) => {
       "venueId",
       "name",
       "type",
+      "description",
       "startDate",
       "endDate",
     ],

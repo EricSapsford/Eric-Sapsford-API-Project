@@ -1,0 +1,70 @@
+.OOverDiv {
+  display: flex;
+  justify-content: center;
+}
+
+.SoManyDiv {
+  display: flex;
+  border-top: 1px solid grey;
+  padding: 20px 20px;
+  width: 800px;
+}
+
+.CardOverDiv {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 20px;
+  width: 800px;
+}
+
+.WhyOverDiv:hover {
+  background-color: tan;
+  border-radius: 3em;
+}
+
+.Cimage {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 3em;
+}
+
+.iddlybits {
+  text-align: left;
+  padding-left: 40px;
+}
+
+.blurb {
+  word-wrap: normal;
+}
+
+/* ========================REAL EVENT CARD======================== */
+
+.EdateAndTime {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: large;
+  padding-bottom: 5px;
+}
+
+.Ename {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: x-large;
+  padding-bottom: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: normal;
+}
+
+.Elocation {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  padding-bottom: 18px;
+}
+
+.Eblurb {
+  word-wrap: normal;
+  text-align: left;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  padding-left: 20px;
+  padding-bottom: 5px;
+  height: 50px;
+}
