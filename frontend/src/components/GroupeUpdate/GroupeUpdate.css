@@ -1,0 +1,49 @@
+.OofDiv {
+  display: flex;
+  justify-content: center;
+}
+
+.breader,
+.finalSteps {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  border-bottom: 1px solid grey;
+}
+
+.OofLocation,
+.Oofname,
+.about {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.actualLocationInput,
+.actualNameInput,
+.actualImgInput,
+.actualAboutTextArea,
+.actualPoroSelector,
+.actualPpSelector {
+  margin-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 5px;
+}
+
+.actualLocationSelector {
+  padding: 5px 5px;
+}
+
+.locationInput,
+.nameInput,
+.about {
+  border-bottom: 1px solid grey;
+}
+
+.submitButton {
+  margin: 20px 0;
+}
+
+.actualSubmitButton {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import * as eventActions from "../../store/events";
+import * as groupActions from "../../store/groupes"
 import "./EventCreate.css"
 
 function EventCreate() {
@@ -13,15 +14,21 @@ function EventCreate() {
   // console.log("groupid", groupId)
 
   useEffect(() => {
-    dispatch(eventActions.getOneEventThunk(groupId))
+    dispatch(groupActions.getAllGroupesThunk())
   }, [dispatch])
 
-  const singleGroup = useSelector(state => state.groups.singleGroup);
+  // const allGroups = useSelector(state => state.groups.allGroups)
+  const singleGroup = useSelector(state => state.groups.allGroups[groupId])
+  // console.log("allgroups", allGroups)
+  // console.log("single", singleGroup)
+
+  // const singleGroup = useSelector(state => state.groups.singleGroup);
   let groupeName;
   // let groupeId;
   if (singleGroup) {
     groupeName = singleGroup.name
     // groupeId = singleGroup.id
+    // console.log("groupeName", groupeName)
   }
 
 

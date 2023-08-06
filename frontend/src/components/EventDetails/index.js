@@ -19,7 +19,7 @@ function EventDetails() {
     dispatch(eventActions.getOneEventThunk(eventId));
   }, [dispatch, eventId]);
 
-  const sessionUser = useSelector(state => state.session.user);
+  const sessionUser = useSelector(state => state.session.user ? state.session.user : {});
   // const singleEvent = useSelector(state => state.events.singleEvent);
   // const singleGroup = useSelector(state => state.groups.singleGroup);
 
@@ -108,7 +108,8 @@ function EventDetails() {
   //----------------------------------- BUTTONS -----------------------------------
 
   let hideUD = true;
-  const sessionUserId = sessionUser.id;
+  let sessionUserId;
+  if (sessionUser) sessionUserId = sessionUser.id
   if (!sessionUser) {
     hideUD = true;
   } else if (sessionUserId !== organId) {

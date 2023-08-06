@@ -108,164 +108,172 @@ function GroupeUpdate() {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <div className="fullFormDiv">
+      <div className="OofDiv">
+        <form onSubmit={onSubmit}>
+          <div className="fullFormDiv">
 
-          {/* header */}
-          <div className="header">
-            <div>UPDATE YOUR GROUPS INFORMATION</div>
-            <div>
-              <h2>We'll walk you through a few steps to update your group's information</h2>
+            {/* header */}
+            <div className="breader">
+              <div>UPDATE YOUR GROUPS INFORMATION</div>
+              <div>
+                <h2>We'll walk you through a few steps to update your group's information</h2>
+              </div>
             </div>
-          </div>
 
-          {/* location */}
-          <div className="location">
-            <div>
-              <h2>First, set your group's location</h2>
+            {/* location */}
+            <div className="OofLocation">
+              <div>
+                <h2>First, set your group's location</h2>
+              </div>
+              <div>
+                <span>Meetup groups meet locally, in person, and online. We'll connect you with peolpe in your area, and more can join online</span>
+              </div>
+              <div className="locationInput">
+                <span>
+                  <input
+                    className="actualLocationInput"
+                    type="text"
+                    size={40}
+                    name="city"
+                    onChange={(e) => setCity(e.target.value)}
+                    value={city}
+                    placeholder="City"
+                    required
+                  />
+                </span>
+                <span>
+                  <select
+                    className="actualLocationSelector"
+                    onChange={(e) => setState(e.target.value)}
+                    value={state}
+                  >
+                    {statesArr.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </span>
+              </div>
+              {/* error popups */}
+              {hasSubmitted && VEs.city && !VEs.state ? <div className="errorPops">{VEs.city}</div> : null}
+              {hasSubmitted && !VEs.city && VEs.state ? <div className="errorPops">{VEs.state}</div> : null}
+              {hasSubmitted && VEs.city && VEs.state ? <div className="errorPops">{VEs.city} · {VEs.state}</div> : null}
             </div>
-            <div>
-              <span>Meetup groups meet locally, in person, and online. We'll connect you with peolpe in your area, and more can join online</span>
-            </div>
-            <div className="locationInput">
-              <span>
+
+            {/* name */}
+            <div className="Oofname">
+              <div>
+                <h2>What will your group's name be?</h2>
+              </div>
+              <div>
+                <div>Choose a name that will give people a clear idea of what the group is about.</div>
+                <div> Feel free to get creative! You can edit this later if you change your mind</div>
+              </div>
+              <div className="nameInput">
                 <input
-                  className="actualLocationInput"
+                  className="actualNameInput"
                   type="text"
-                  name="city"
-                  onChange={(e) => setCity(e.target.value)}
-                  value={city}
-                  placeholder="City"
+                  size={40}
+                  name="name"
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  placeholder="What is your group name? Keep it under 60...or else."
                   required
                 />
-              </span>
-              <span>
+              </div>
+              {/* error popups */}
+              {hasSubmitted && VEs.name && (<div className="errorPops">{VEs.name}</div>)}
+            </div>
+
+            {/* about */}
+            <div className="about">
+              <div>
+                <h2>Now describe what your group will be about</h2>
+              </div>
+              <div>
+                <span>People will see this when we promote your group, but you'll be able to add to it later, too.</span>
+              </div>
+              <div>1. What's the purpose of the group?</div>
+              <div>2. Who should join?</div>
+              <div>3. What will you do at your events?</div>
+              <div className="aboutTextArea">
+                <textarea
+                  className="actualAboutTextArea"
+                  id="comments"
+                  name="about"
+                  onChange={(e) => setAbout(e.target.value)}
+                  value={about}
+                  placeholder="Please write at least 50 characters"
+                  required
+                  cols={40}
+                  rows={10}
+                />
+              </div>
+              {/* error popups */}
+              {hasSubmitted && VEs.about && (<div className="errorPops">{VEs.name}</div>)}
+            </div>
+
+            {/* Final steps */}
+            <div className="finalSteps">
+              <div>
+                <h2>Final Steps</h2>
+              </div>
+              <div>Is this an in person or online group?</div>
+              <div className="poroSelector">
                 <select
-                  className="actualLocationSelector"
-                  onChange={(e) => setState(e.target.value)}
-                  value={state}
+                  className="actualPoroSelector"
+                  onChange={(e) => setType(e.target.value)}
+                  value={type}
                 >
-                  {statesArr.map(state => (
-                    <option key={state} value={state}>{state}</option>
-                  ))}
+                  <option key="(select one)" value="(select one)">
+                    (select one)
+                  </option>
+                  <option key="Online" value="Online">Online</option>
+                  <option key="In person" value="In person">In person</option>
                 </select>
-              </span>
+              </div>
+              {/* error popups */}
+              {hasSubmitted && VEs.type && (<div className="errorPops">{VEs.type}</div>)}
+
+              <div>Is this group private or public?</div>
+              <div className="ppSelector">
+                <select
+                  className="actualPpSelector"
+                  onChange={(e) => setIsPrivate(e.target.value)}
+                  value={isPrivate}
+                >
+                  <option value="(select one)">
+                    (select one)
+                  </option>
+                  <option key="Private" value={true}>Private</option>
+                  <option key="Public" value={false}>Public</option>
+                </select>
+              </div>
+              {/* error popups */}
+              {hasSubmitted && VEs.isPrivate && (<div className="errorPops">{VEs.isPrivate}</div>)}
+
+              <div>Please add an image url for your group below:</div>
+              <div className="imgInput">
+                <input
+                  className="actualImgInput"
+                  type="url"
+                  size={40}
+                  name="url"
+                  onChange={(e) => setUrl(e.target.value)}
+                  value={url}
+                  placeholder="Image URL"
+                />
+              </div>
+              {/* error popups */}
+              {hasSubmitted && VEs.url && (<div className="errorPops">{VEs.url}</div>)}
+              {/* divider */}
             </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.city && !VEs.state ? <div className="errorPops">{VEs.city}</div> : null}
-            {hasSubmitted && !VEs.city && VEs.state ? <div className="errorPops">{VEs.state}</div> : null}
-            {hasSubmitted && VEs.city && VEs.state ? <div className="errorPops">{VEs.city} · {VEs.state}</div> : null}
+            <div className="submitButton">
+              <button className="actualSubmitButton">Update Group</button>
+            </div>
+
           </div>
-
-          {/* name */}
-          <div className="name">
-            <div>
-              <h2>What will your group's name be?</h2>
-            </div>
-            <div>
-              <span>Choose a name that will give people a clear idea of what the group is about. Feel free to get creative! You can edit this later if you change your mind</span>
-            </div>
-            <div className="nameInput">
-              <input
-                className="actualNameInput"
-                type="text"
-                name="name"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                placeholder="What is your group name? Keep it under 60...or else."
-                required
-              />
-            </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.name && (<div className="errorPops">{VEs.name}</div>)}
-          </div>
-
-          {/* about */}
-          <div className="about">
-            <div>
-              <h2>Now describe what your group will be about</h2>
-            </div>
-            <div>
-              <span>People will see this when we promote your group, but you'll be able to add to it later, too.</span>
-            </div>
-            <div>1. What's the purpose of the group?</div>
-            <div>2. Who should join?</div>
-            <div>3. What will you do at your events?</div>
-            <div className="aboutTextArea">
-              <textarea
-                className="actualAboutTextArea"
-                id="comments"
-                name="about"
-                onChange={(e) => setAbout(e.target.value)}
-                value={about}
-                placeholder="Please write at least 50 characters"
-                required
-              />
-            </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.about && (<div className="errorPops">{VEs.name}</div>)}
-          </div>
-
-          {/* Final steps */}
-          <div className="finalSteps">
-            <div>
-              <h2>Final Steps</h2>
-            </div>
-            <div>Is this an in person or online group?</div>
-            <div className="poroSelector">
-              <select
-                className="actualPoroSelector"
-                onChange={(e) => setType(e.target.value)}
-                value={type}
-              >
-                <option key="(select one)" value="(select one)">
-                  (select one)
-                </option>
-                <option key="Online" value="Online">Online</option>
-                <option key="In person" value="In person">In person</option>
-              </select>
-            </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.type && (<div className="errorPops">{VEs.type}</div>)}
-
-            <div>Is this group private or public?</div>
-            <div className="ppSelector">
-              <select
-                className="actualPpSelector"
-                onChange={(e) => setIsPrivate(e.target.value)}
-                value={isPrivate}
-              >
-                <option value="(select one)">
-                  (select one)
-                </option>
-                <option key="Private" value={true}>Private</option>
-                <option key="Public" value={false}>Public</option>
-              </select>
-            </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.isPrivate && (<div className="errorPops">{VEs.isPrivate}</div>)}
-
-            <div>Please add an image url for your group below:</div>
-            <div className="imgInput">
-              <input
-                className="actualImgInput"
-                type="url"
-                name="url"
-                onChange={(e) => setUrl(e.target.value)}
-                value={url}
-                placeholder="Image URL"
-              />
-            </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.url && (<div className="errorPops">{VEs.url}</div>)}
-            {/* divider */}
-          </div>
-          <div className="submitButton">
-            <button>Update Group</button>
-          </div>
-
-        </div>
-      </form >
+        </form >
+      </div>
     </>
   )
 }

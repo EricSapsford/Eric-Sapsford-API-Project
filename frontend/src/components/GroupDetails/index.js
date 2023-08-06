@@ -21,7 +21,7 @@ function GroupDetails() {
   }, [dispatch]);
 
 
-  const sessionUser = useSelector(state => state.session.user);
+  const sessionUser = useSelector(state => state.session.user ? state.session.user : {});
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   const groupe = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   const groupeImageArr = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []);
@@ -70,7 +70,8 @@ function GroupDetails() {
 
   //NEED TO ADD LOGIC SO THAT THE JOIN BUTTON HIDES WHEN SOMEONE IS THE MEMBER
   let hideJoin = true;
-  const sessionUserId = sessionUser.id;
+  let sessionUserId;
+  if (sessionUser) sessionUserId = sessionUser.id
   if (!sessionUser) {
     hideJoin = true;
   } else if (sessionUserId === organizerId) {
@@ -104,7 +105,7 @@ function GroupDetails() {
         </div>
 
         {hideJoin ? null : <div className="join">
-          <button>Join this group</button>
+          <button disabled="true">Join this group</button>
         </div>
         }
 

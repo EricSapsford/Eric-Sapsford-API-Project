@@ -15,7 +15,7 @@ module.exports = {
     await GroupImage.bulkCreate([
       {
         groupId: 1,
-        url: "https://imagesite.com/group1",
+        url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Thanksgiving_Dinner_table.jpg/800px-Thanksgiving_Dinner_table.jpg?20210213175610",
         preview: true,
       },
       {
@@ -35,7 +35,7 @@ module.exports = {
     options.tableName = "GroupImages";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      url: { [Op.in]: ["https://imagesite.com/group1", "https://imagesite.com/group2", "https://imagesite.com/group3"] }
+      url: { [Op.in]: ["https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Thanksgiving_Dinner_table.jpg/800px-Thanksgiving_Dinner_table.jpg?20210213175610", "https://imagesite.com/group2", "https://imagesite.com/group3"] }
     }, {});
   }
 };
