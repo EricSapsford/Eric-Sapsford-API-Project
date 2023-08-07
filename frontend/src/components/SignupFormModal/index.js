@@ -70,7 +70,7 @@ function SignupFormModal() {
             placeholder="Email"
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className="eros">{errors.email}</p>}
         <label>
           <input
             className="SFinput"
@@ -82,7 +82,7 @@ function SignupFormModal() {
             placeholder="Username"
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className="eros">{errors.username}</p>}
         <label>
           <input
             className="SFinput"
@@ -94,7 +94,7 @@ function SignupFormModal() {
             placeholder="First Name"
           />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
+        {errors.firstName && <p className="eros">{errors.firstName}</p>}
         <label>
           <input
             className="SFinput"
@@ -106,7 +106,7 @@ function SignupFormModal() {
             placeholder="Last Name"
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
+        {errors.lastName && <p className="eros">{errors.lastName}</p>}
         <label>
           <input
             className="SFinput"
@@ -118,7 +118,7 @@ function SignupFormModal() {
             placeholder="Password"
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className="eros">{errors.password}</p>}
         <label>
           <input
             className="SFinput"
@@ -131,7 +131,7 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
+          <p className="eros">{errors.confirmPassword}</p>
         )}
         <button className="SFbutton" id="SFMbutton" type="submit" disabled={disabled}>Sign Up</button>
       </form>
