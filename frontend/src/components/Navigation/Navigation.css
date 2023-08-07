@@ -40,3 +40,17 @@
   margin: 13px 0;
   margin-left: 10px;
 }
+
+.startNewGroupButton {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.startNewGroupButton:active {
+  box-shadow: none;
+  background-color: red;
+}

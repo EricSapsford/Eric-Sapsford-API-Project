@@ -26,6 +26,16 @@ function LandingPage() {
         </div>
       </div>
 
+      <div className="HMWOverDiv">
+        <h2>Click below and see how it works!</h2>
+      </div>
+
+      {/* <div className="instructions">
+        <div className="undedInstructions">
+          Click the links below to begin browsing. Once you've found a group or event that's to your liking, sign up and join in on the foodie fun! Or sign up and create a group of your own!
+        </div>
+      </div> */}
+
       <div className="featureLinks">
         <NavLink to="/events" style={{ textDecoration: "none" }}>
           <div className="featureEvents">

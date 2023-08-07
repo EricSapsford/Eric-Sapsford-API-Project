@@ -55,8 +55,22 @@ function GroupDetails() {
     }
   }
 
-  console.log("upcoming", upcomingArr, "past", pastArr)
+  // console.log("upcoming", upcomingArr, "past", pastArr)
 
+
+  function compare(a, b) {
+    if (a.startDate < b.startDate) {
+      return -1;
+    }
+    if (a.startDate > b.startDate) {
+      return 1;
+    }
+    return 0
+  }
+
+  upcomingArr.sort(compare)
+  pastArr.sort(compare)
+  // console.log("sorted", upcomingArr)
 
   //------------------------------------ IMAGE ------------------------------------
   //------------------------------------ IMAGE ------------------------------------
@@ -108,8 +122,10 @@ function GroupDetails() {
     hideJoin = true;
   } else if (sessionUserId === organizerId) {
     hideJoin = true;
-  } else {
+  } else if (sessionUserId !== organizerId) {
     hideJoin = false;
+  } else {
+    hideJoin = false
   }
 
   let hideCRUD = true;
@@ -118,6 +134,10 @@ function GroupDetails() {
   } else if (sessionUserId === organizerId) {
     hideCRUD = false;
   }
+
+  // const alert = () => {
+  //   alert("Feature coming soon")
+  // }
 
   return (
     <>
@@ -149,7 +169,7 @@ function GroupDetails() {
               </div>
               }
 
-              {hideCRUD ? null : <div>
+              {hideCRUD ? null : <div className="JCRUDinfant">
                 <NavLink to={`/groups/${groupId}/events/new`}>
                   <button className="CRUD">Create event</button>
                 </NavLink>
@@ -174,7 +194,7 @@ function GroupDetails() {
           <div className="GDabout">What we're about</div>
           <div className="actualGDabout">{groupe.about}</div>
           <div>
-            {upcomingArr.length ? <h2 style={{ color: "brown" }}>Upcoming Events · {upcomingArr.length}</h2> : null}
+            {upcomingArr.length ? <h2 style={{ color: "brown" }}>Upcoming Events · {upcomingArr.length}</h2> : <h2 style={{ color: "brown" }}>No Upcoming Events</h2>}
             {upcomingArr.map((event) => (
               <div key={event.id}>
                 <GeventCard event={event} city={groupe.city} state={groupe.state} />

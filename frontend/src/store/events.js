@@ -210,7 +210,7 @@ const eventReducer = (state = initialState, action) => {
 
     case GET_ONE_EVENT: {
       // const newState = { ...state, singleEvent: {} }
-      const newState = { ...state }
+      const newState = { ...state, singleEvent: {} }
       newState.singleEvent = action.event;
       return newState;
     }
@@ -219,7 +219,7 @@ const eventReducer = (state = initialState, action) => {
       // console.log("hello from create event thunk")
       // console.log(action);
       // const newState = { ...state, singleEvent: {}, allEvents: {} }
-      const newState = { ...state }
+      const newState = { ...state, singleEvent: {} }
       newState.allEvents[action.event.id] = action.event
       return newState
     }
@@ -227,7 +227,7 @@ const eventReducer = (state = initialState, action) => {
     case CREATE_EVENT_IMAGE: {
       // console.log("hello from create event image thunk")
       // const newState = { ...state, singleEvent: { EventImages: [] } }
-      const newState = { ...state }
+      const newState = { ...state, singleEvent: { EventImages: [] } }
       newState.singleEvent.EventImages.push(action.img)
       return newState;
     }

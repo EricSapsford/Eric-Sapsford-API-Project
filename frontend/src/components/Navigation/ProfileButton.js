@@ -29,10 +29,24 @@ function ProfileButton({ user }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
+  const closeMenu = () => setShowMenu(false);
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     history.push("/")
+  };
+
+  const allGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    history.push(`/groups`);
+  };
+
+  const allEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    history.push(`/events`);
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -46,11 +60,19 @@ function ProfileButton({ user }) {
       </div>
       <div id="dropdownDiv" className={ulClassName}>
         <div className={ulClassName} ref={ulRef}>
+          <dvi className="riggle">Hello {user.firstName}!</dvi>
           <div className="riggle">{user.username}</div>
-          <div className="riggle">{user.firstName} {user.lastName}</div>
+          {/* <div className="riggle">{user.firstName} {user.lastName}</div> */}
           <div className="riggle">{user.email}</div>
           <div className="riggle">
             <button onClick={logout} className="riggleButton">Log Out</button>
+          </div>
+          <div className="riggle">
+
+            <button onClick={allGroups} className="riggleButton">View Groups</button>
+          </div>
+          <div className="riggle">
+            <button onClick={allEvents} className="riggleButton">View Events</button>
           </div>
         </div>
       </div>

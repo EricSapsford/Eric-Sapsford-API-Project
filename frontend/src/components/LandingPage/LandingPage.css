@@ -54,7 +54,7 @@
 
 .featureLinks {
   margin-bottom: 50px;
-  margin-top: 200px;
+  margin-top: 100px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -111,4 +111,24 @@
 .joinUpButtonActual:active {
   box-shadow: none;
   background-color: red;
+}
+
+
+.HMWOverDiv {
+  display: flex;
+  justify-content: center;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: brown;
+  margin-top: 50px;
+}
+
+.instructions {
+  display: flex;
+  text-align: center;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.underInstructions {
+  width: 500px;
 }

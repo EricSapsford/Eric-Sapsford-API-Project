@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import OpenModalButton from "../OpenModalButton";
@@ -11,13 +11,24 @@ import LoginFormDemo from "../LoginFormDemoModal";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+  const history = useHistory();
+
+  const create = (e) => {
+    e.preventDefault();
+    history.push("/groups/new")
+  }
 
 
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
       <div className="sessionLinks">
-        <ProfileButton user={sessionUser} />
+        <div className="sessionLinksUnderDiv">
+          <button className="startNewGroupButton" onClick={create}>Start a new group</button>
+        </div>
+        <div className="sessionLinksUnderDiv">
+          <ProfileButton user={sessionUser} />
+        </div>
       </div>
     );
   } else {

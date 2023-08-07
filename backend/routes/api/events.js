@@ -204,18 +204,18 @@ router.get("/:eventId", async (req, res) => {
   }
   );
 
-  console.log(event.dataValues.Groupe)
+  console.log("event", event.dataValues.Groupe)
 
   const organ = await Groupe.findOne({
     include: [
       { model: User }
     ],
     where: {
-      id: event.dataValues.Groupe.dataValues.organizerId
+      organizerId: event.dataValues.Groupe.dataValues.organizerId
     }
   })
 
-  // console.log("organ", organ.dataValues.User.dataValues.firstName)
+  console.log("organ", organ)
 
   if (!event) {
     res.status(404);

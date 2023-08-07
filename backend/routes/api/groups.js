@@ -1657,6 +1657,15 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
 
   let foundGroupeId = foundGroupe.dataValues.id;
 
+  // const dirtyMember = await Membership.findOne({
+  //   order: [['id', 'DESC']],
+  // });
+
+  // console.log("member", dirtyMemberIdInc)
+
+  // const dirtyMemberIdInc = 1 + dirtyMember.dataValues.id;
+  // console.log("dirtyMemberIdInc", dirtyMemberIdInc)
+
 
   await Membership.bulkCreate([{
     userId: organizerId,

@@ -67,6 +67,11 @@
 .JCRUDparent {
   position: relative;
   height: 233px;
+  width: 260px;
+}
+
+.JCRUDinfant {
+  width: 260px;
 }
 
 .JCRUDchild {
