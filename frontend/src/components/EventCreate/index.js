@@ -90,12 +90,34 @@ function EventCreate() {
 
     console.log(event);
 
+    //   try {
+    //     const res = await dispatch(eventActions.createEventThunk(event));
+    //     console.log("thunk try", res)
+    //     if (res.id) {
+    //       await dispatch(eventActions.getOneEventThunk(3))
+    //       history.push(`/events/${res.id + 1}`);
+    //     } else {
+    //       return res;
+    //     }
+    //   } catch (res) {
+    //     console.log("thunk catch", res)
+    //     const data = await res.json();
+    //     console.log("got errors son", data)
+    //   }
+    // }
+
     try {
       const res = await dispatch(eventActions.createEventThunk(event));
       console.log("thunk try", res)
       if (res.id) {
-        await dispatch(eventActions.getOneEventThunk(3))
-        history.push(`/events/${res.id + 1}`);
+        const dodgeThis = async () => {
+          await Promise.all([
+            dispatch(eventActions.getOneEventThunk(3)),
+            // history.push(`/groups`),
+            history.push(`/events/${res.id + 1}`)
+          ])
+        }
+        dodgeThis();
       } else {
         return res;
       }
@@ -105,6 +127,7 @@ function EventCreate() {
       console.log("got errors son", data)
     }
   }
+
 
   return (
     <>

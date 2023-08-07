@@ -206,7 +206,7 @@ const eventReducer = (state = initialState, action) => {
     }
 
     case GET_ONE_EVENT: {
-      const newState = { ...state }
+      const newState = { ...state, singleEvent: {} }
       newState.singleEvent = action.event;
       return newState;
     }
@@ -214,7 +214,7 @@ const eventReducer = (state = initialState, action) => {
     case CREATE_EVENT: {
       // console.log("hello from create event thunk")
       // console.log(action);
-      const newState = { ...state }
+      const newState = { ...state, singleEvent: {} }
       newState.allEvents[action.event.id] = action.event
       return newState
     }
