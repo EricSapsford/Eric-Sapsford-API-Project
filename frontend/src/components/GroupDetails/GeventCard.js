@@ -11,7 +11,7 @@ function GeventCard({ event, city, state }) {
   let date = startDateRaw.slice(0, 10)
 
   let timeRaw = startDateRaw.slice(11, 16)
-  let previewImage = event.EventImages[0].url
+  let previewImage = event.EventImages[0] ? event.EventImages[0].url : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
 
 
 

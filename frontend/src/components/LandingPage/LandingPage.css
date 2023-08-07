@@ -8,6 +8,13 @@
   object-fit: fill;
 }
 
+.bannerRuler {
+  height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .bannerWords {
   /* margin-top: 400px; */
   display: flex;
@@ -25,16 +32,29 @@
   color: white;
 }
 
-.banWordsTop {
-  margin-top: 200px;
+/* .bannerWordsDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.bannerWords {
+  width: fit-content;
+  padding: 40px 40px;
+  border-radius: 3em;
 }
 
-.banWordsBot {
+/* .banWordsTop {
+  margin-top: 200px;
+} */
+
+/* .banWordsBot {
   margin-bottom: 228px;
-}
+} */
 
 .featureLinks {
-  margin: 200px 0;
+  margin-bottom: 50px;
+  margin-top: 200px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -42,7 +62,8 @@
 
 .featureEvents,
 .featureGroups,
-.featureCreate {
+.featureCreate,
+.featureCreateDisabled {
   margin: 0 25px;
   padding: 50px 50px;
   border-radius: 3em;
@@ -65,4 +86,29 @@
 .featureGroups:hover,
 .featureCreate:hover {
   background-color: lightgray;
+}
+
+.featureCreateDisabled {
+  background-color: grey;
+  color: black;
+}
+
+.joinUpButtonDiv {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.joinUpButtonActual {
+  padding: 10px 10px;
+  background-color: lightcoral;
+  box-shadow: 3px 3px black;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.joinUpButtonActual:active {
+  box-shadow: none;
+  background-color: red;
 }

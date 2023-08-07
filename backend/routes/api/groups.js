@@ -1311,29 +1311,33 @@ router.post("/:groupId/events", requireAuth, validateEvent, async (req, res) => 
     }
   });
 
-  if (!userMembership) {
-    res.status(403);
-    return res.json({
-      "message": "Whoa there buckeroo, that ain't yours"
-    })
-  }
 
-  // LET
-  // THAT
-  // DOG
-  // OUT
+  //logic on this seems flawed, maybe come back to it
+  //=================================================
+  // if (!userMembership) {
+  //   res.status(403);
+  //   return res.json({
+  //     "message": "Whoa there buckeroo, that ain't yours"
+  //   })
+  // }
 
-  let dog = 0;
-  if (userId === findGroupe.organizerId) dog++;
-  // console.log(dog);
-  if (userMembership.status === "co-host") dog++;
-  // console.log(dog);
-  if (dog === 0) {
-    res.status(403);
-    return res.json({
-      "message": "Whoa there buckeroo, that ain't yours"
-    })
-  }
+  // // LET
+  // // THAT
+  // // DOG
+  // // OUT
+
+  // let dog = 0;
+  // if (userId === findGroupe.organizerId) dog++;
+  // // console.log(dog);
+  // if (userMembership.status === "co-host") dog++;
+  // // console.log(dog);
+  // if (dog === 0) {
+  //   res.status(403);
+  //   return res.json({
+  //     "message": "Whoa there buckeroo, that ain't yours"
+  //   })
+  // }
+  //===================================================
 
   /*
   *************************************************************************
@@ -1649,10 +1653,11 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
 
   await Membership.bulkCreate([{
     userId: organizerId,
-    groupId: foundGroupeId,
+    groupId: dirtyGroupIdInc,
     status: "host",
   },
   ], { validate: true })
+  console.log()
 
   // create corresponding Membership
   res.status(201);

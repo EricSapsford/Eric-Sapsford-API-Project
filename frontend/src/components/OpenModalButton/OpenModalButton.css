@@ -5,3 +5,8 @@
   border: 2px solid black;
   cursor: pointer;
 }
+
+.OMB:active {
+  box-shadow: none;
+  background-color: red;
+}

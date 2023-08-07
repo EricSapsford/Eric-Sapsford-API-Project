@@ -95,3 +95,8 @@
   margin-right: 10px;
   cursor: pointer;
 }
+
+.CRUD:active {
+  box-shadow: none;
+  background-color: red;
+}

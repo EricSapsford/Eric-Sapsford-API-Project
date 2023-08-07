@@ -45,6 +45,10 @@ function EventCreate() {
   const [VEs, setVEs] = useState({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  const rawDate = new Date();
+  const date = rawDate.toISOString()
+
+
 
   //----------------------- VALIDATION ERRORS -----------------------
   //----------------------- VALIDATION ERRORS -----------------------
@@ -52,7 +56,30 @@ function EventCreate() {
   //----------------------- VALIDATION ERRORS -----------------------
 
   useEffect(() => {
+    const errors = {};
 
+    if (name.length < 5) errors["name"] = "Name must be at least 5 characters long"
+    if (type === "(select one)") errors["type"] = "Group Type is required"
+    if (isPrivate === "(select one)") errors["isPrivate"] = "Visibility Type is required"
+
+    if (!endDateRaw.length) errors["endDate"] = "Event end is required"
+    if (endDateRaw < `${date}`) errors["endDate1"] = "Event end must be in the future"
+
+    if (!startDateRaw.length) errors["startDate"] = "Event start is required"
+    if (startDateRaw < `${date}`) errors["startDate1"] = "Event start must be in the future"
+
+    if (endDateRaw < startDateRaw) errors["date3"] = "Event start must be before event end"
+
+    if (url.includes(".png")) {
+    } else if (url.includes(".jpg")) {
+    } else if (url.includes(".jpeg")) {
+    } else if (url.includes("unsplash.com")) {
+    } else {
+      errors["url"] = "Image URL must end in .png, .jpg, .jpeg, or be from unsplash.com"
+    }
+    if (description.length < 50) errors["description"] = "Description must be at least 50 characters long"
+
+    setVEs(errors);
   }, [name, description, type, isPrivate, price, capacity, startDateRaw, endDateRaw, url])
 
   const onSubmit = async (e) => {
@@ -88,7 +115,7 @@ function EventCreate() {
       groupId: parseInt(groupId)
     }
 
-    console.log(event);
+    // console.log(event);
 
     //   try {
     //     const res = await dispatch(eventActions.createEventThunk(event));
@@ -105,21 +132,26 @@ function EventCreate() {
     //     console.log("got errors son", data)
     //   }
     // }
-
-    try {
-      const res = await dispatch(eventActions.createEventThunk(event));
-      await dispatch(eventActions.getAllEventsThunk())
-      console.log("thunk try", res)
-      if (res.id) {
-        history.push(`/events/${res.id + 1}`)
-      } else {
-        return res;
+    if (!Object.entries(VEs).length) {
+      try {
+        const res = await dispatch(eventActions.createEventThunk(event));
+        await dispatch(eventActions.getAllEventsThunk())
+        console.log("thunk try", res)
+        if (res.id) {
+          history.push(`/events/${res.id + 1}`)
+        } else {
+          return res;
+        }
+      } catch (res) {
+        console.log("thunk catch", res)
+        const data = await res.json();
+        console.log("got errors son", data)
       }
-    } catch (res) {
-      console.log("thunk catch", res)
-      const data = await res.json();
-      console.log("got errors son", data)
+    } else {
+      console.log("FIX YOUR INPUTS, LOOK AT THE VALIDATION ERRORS")
+      // console.log("date", date, "startDate", startDateRaw, "logic", startDateRaw < `${date}`)
     }
+
   }
 
 
@@ -150,10 +182,10 @@ function EventCreate() {
                   placeholder="What is your event name?"
                   required
                 />
+                {/* error popups */}
+                {hasSubmitted && VEs.name && (<div className="errorPops">{VEs.name}</div>)}
               </div>
             </div>
-            {/* error popups */}
-            {hasSubmitted && VEs.name && (<div className="errorPops">{VEs.name}</div>)}
 
             {/* type */}
             <div className="porSelDiv">
@@ -240,6 +272,8 @@ function EventCreate() {
               </div>
               {/* error popups */}
               {hasSubmitted && VEs.startDate && (<div className="errorPops">{VEs.startDate}</div>)}
+              {hasSubmitted && VEs.startDate1 && (<div className="errorPops">{VEs.startDate1}</div>)}
+              {hasSubmitted && VEs.date3 && (<div className="errorPops">{VEs.date3}</div>)}
 
               <div>When does your event end?</div>
               <div className="dateInput">
@@ -253,6 +287,8 @@ function EventCreate() {
               </div>
               {/* error popups */}
               {hasSubmitted && VEs.endDate && (<div className="errorPops">{VEs.endDate}</div>)}
+              {hasSubmitted && VEs.endDate1 && (<div className="errorPops">{VEs.endDate1}</div>)}
+              {hasSubmitted && VEs.date3 && (<div className="errorPops">{VEs.date3}</div>)}
             </div>
 
             {/* image */}
@@ -290,7 +326,7 @@ function EventCreate() {
                 />
               </div>
               {/* error popups */}
-              {hasSubmitted && VEs.about && (<div className="errorPops">{VEs.description}</div>)}
+              {hasSubmitted && VEs.description && (<div className="errorPops">{VEs.description}</div>)}
             </div>
           </div>
           <div className="submitButton">

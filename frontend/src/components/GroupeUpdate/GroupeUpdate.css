@@ -47,3 +47,18 @@
   box-shadow: 3px 3px black;
   border: 2px solid black;
 }
+
+.actualSubmitButton:active {
+  box-shadow: none;
+  background-color: red;
+}
+
+.errorPops {
+  margin: 10px 0;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  width: fit-content;
+  padding: 5px 10px;
+}

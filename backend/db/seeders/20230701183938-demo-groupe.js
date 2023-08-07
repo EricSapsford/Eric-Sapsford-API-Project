@@ -25,7 +25,7 @@ module.exports = {
       {
         organizerId: 2,
         name: "Wedding Crashers",
-        about: "Do you LOVE wedding dinners, but just can't seem to get invited to enough weddings to enojoy them? Come with us as we find increasingly illegal methods to gain access to those tasty wedding spreads!",
+        about: "Do you LOVE wedding dinners, but just can't seem to get invited to enough weddings to enjoy them? Come with us as we find increasingly illegal methods to gain access to those tasty wedding spreads!",
         type: "In person",
         private: false,
         city: "New York",

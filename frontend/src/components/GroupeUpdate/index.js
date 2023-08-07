@@ -40,6 +40,9 @@ function GroupeUpdate() {
   const [VEs, setVEs] = useState({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  console.log("isPrivate", isPrivate)
+  console.log("city", city)
+
   useEffect(() => {
     const errors = {};
     // if (!name.length) errors["name"] = "Name is required"
@@ -49,11 +52,14 @@ function GroupeUpdate() {
     if (about.length < 50) errors["about"] = "Description must be at least 50 characters long"
     if (type === "(select one)") errors["type"] = "Group Type is required"
     if (isPrivate === "(select one)") errors["isPrivate"] = "Visibility Type is required"
-    if (url.includes(".png")) {
-    } else if (url.includes(".jpg")) {
-    } else if (url.includes(".jpeg")) {
-    } else {
-      errors["url"] = "Image URL must end in .png, .jpg, or .jpeg"
+    if (url.length) {
+      if (url.includes(".png")) {
+      } else if (url.includes(".jpg")) {
+      } else if (url.includes(".jpeg")) {
+      } else if (url.includes("unsplash.com")) {
+      } else {
+        errors["url"] = "Image URL must end in .png, .jpg, .jpeg, or be from unsplash.com"
+      }
     }
 
     setVEs(errors);
@@ -81,20 +87,24 @@ function GroupeUpdate() {
     // history.push(`/groups/${res.id}`);
 
     // BETTER ERRORS
-    try {
-      const res = await dispatch(groupeActions.updateGroupeThunk(payloadGroupe));
-      //--------- ^^^ don't need this my ass
-      console.log("thunk try", res)
-      if (res.id) {
-        history.push(`/groups/${res.id}`);
-      } else {
-        return res;
-      }
-    } catch (res) {
-      console.log("thunk catch", res)
-      const data = await res.json();
-      console.log("got errors son", data)
-    };
+    if (!Object.entries(VEs).length) {
+      try {
+        const res = await dispatch(groupeActions.updateGroupeThunk(payloadGroupe));
+        //--------- ^^^ don't need this my ass
+        console.log("thunk try", res)
+        if (res.id) {
+          history.push(`/groups/${res.id}`);
+        } else {
+          return res;
+        }
+      } catch (res) {
+        console.log("thunk catch", res)
+        const data = await res.json();
+        console.log("got errors son", data)
+      };
+    } else {
+      console.log("FIX YOUR INPUTS, LOOK AT THE VALIDATION ERRORS")
+    }
 
     // setName("")
     // setAbout("")
@@ -152,11 +162,11 @@ function GroupeUpdate() {
                     ))}
                   </select>
                 </span>
+                {/* error popups */}
+                {hasSubmitted && VEs.city && !VEs.state ? <div className="errorPops">{VEs.city}</div> : null}
+                {hasSubmitted && !VEs.city && VEs.state ? <div className="errorPops">{VEs.state}</div> : null}
+                {hasSubmitted && VEs.city && VEs.state ? <div className="errorPops">{VEs.city} · {VEs.state}</div> : null}
               </div>
-              {/* error popups */}
-              {hasSubmitted && VEs.city && !VEs.state ? <div className="errorPops">{VEs.city}</div> : null}
-              {hasSubmitted && !VEs.city && VEs.state ? <div className="errorPops">{VEs.state}</div> : null}
-              {hasSubmitted && VEs.city && VEs.state ? <div className="errorPops">{VEs.city} · {VEs.state}</div> : null}
             </div>
 
             {/* name */}
@@ -209,7 +219,7 @@ function GroupeUpdate() {
                 />
               </div>
               {/* error popups */}
-              {hasSubmitted && VEs.about && (<div className="errorPops">{VEs.name}</div>)}
+              {hasSubmitted && VEs.about && (<div className="errorPops">{VEs.about}</div>)}
             </div>
 
             {/* Final steps */}
@@ -244,8 +254,8 @@ function GroupeUpdate() {
                   <option value="(select one)">
                     (select one)
                   </option>
-                  <option key="Private" value={true}>Private</option>
-                  <option key="Public" value={false}>Public</option>
+                  <option key="Private" value={"true"}>Private</option>
+                  <option key="Public" value={"false"}>Public</option>
                 </select>
               </div>
               {/* error popups */}

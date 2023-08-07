@@ -38,13 +38,14 @@ function GroupeCreate() {
     if (!city.length) errors["city"] = "City is required"
     if (state === "" || state === "State") errors["state"] = "State is required"
     if (about.length < 50) errors["about"] = "Description must be at least 50 characters long"
-    if (type === "(select one)") errors["type"] = "Group Type is required"
-    if (isPrivate === "(select one)") errors["isPrivate"] = "Visibility Type is required"
+    if (type === "") errors["type"] = "Group Type is required"
+    if (isPrivate === "") errors["isPrivate"] = "Visibility Type is required"
     if (url.includes(".png")) {
     } else if (url.includes(".jpg")) {
     } else if (url.includes(".jpeg")) {
+    } else if (url.includes("unsplash.com")) {
     } else {
-      errors["url"] = "Image URL must end in .png, .jpg, or .jpeg"
+      errors["url"] = "Image URL must end in .png, .jpg, .jpeg, or be from unsplash.com"
     }
 
     setVEs(errors);
@@ -70,23 +71,27 @@ function GroupeCreate() {
     // history.push(`/groups/${res.id}`);
 
     // BETTER ERRORS
-    try {
-      const res = await dispatch(groupeActions.createGroupeThunk(groupe));
-      //--------- ^^^ don't need this my ass
-      console.log("thunk try", res)
-      if (res.id) {
-        history.push(`/groups/${res.id + 1}`);
-        // IF YOU EVEN THINK OF REMOVING ^ THIS EVERYTHING BREAKS, DON'T TOUCH IT
-        // BUT ALSO PROBABLY DON'T REPLICATE IT. IT SHOULDN'T WORK. IT JUST DOES
-        // I KNOW WHY THIS WORKS AND IT DOES NEED TO BE THERE
-      } else {
-        return res;
-      }
-    } catch (res) {
-      console.log("thunk catch", res)
-      const data = await res.json();
-      console.log("got errors son", data)
-    };
+    if (!Object.entries(VEs).length) {
+      try {
+        const res = await dispatch(groupeActions.createGroupeThunk(groupe));
+        //--------- ^^^ don't need this my ass
+        console.log("thunk try", res)
+        if (res.id) {
+          history.push(`/groups/${res.id + 1}`);
+          // IF YOU EVEN THINK OF REMOVING ^ THIS EVERYTHING BREAKS, DON'T TOUCH IT
+          // BUT ALSO PROBABLY DON'T REPLICATE IT. IT SHOULDN'T WORK. IT JUST DOES
+          // I KNOW WHY THIS WORKS AND IT DOES NEED TO BE THERE
+        } else {
+          return res;
+        }
+      } catch (res) {
+        console.log("thunk catch", res)
+        const data = await res.json();
+        console.log("got errors son", data)
+      };
+    } else {
+      console.log("FIX YOUR INPUTS, LOOK AT THE VALIDATION ERRORS")
+    }
 
     // setName("")
     // setAbout("")
@@ -144,11 +149,11 @@ function GroupeCreate() {
                     ))}
                   </select>
                 </span>
+                {/* error popups */}
+                {hasSubmitted && VEs.city && !VEs.state ? <div className="errorPops">{VEs.city}</div> : null}
+                {hasSubmitted && !VEs.city && VEs.state ? <div className="errorPops">{VEs.state}</div> : null}
+                {hasSubmitted && VEs.city && VEs.state ? <div className="errorPops">{VEs.city} · {VEs.state}</div> : null}
               </div>
-              {/* error popups */}
-              {hasSubmitted && VEs.city && !VEs.state ? <div className="errorPops">{VEs.city}</div> : null}
-              {hasSubmitted && !VEs.city && VEs.state ? <div className="errorPops">{VEs.state}</div> : null}
-              {hasSubmitted && VEs.city && VEs.state ? <div className="errorPops">{VEs.city} · {VEs.state}</div> : null}
             </div>
 
             {/* name */}
@@ -217,7 +222,7 @@ function GroupeCreate() {
                   onChange={(e) => setType(e.target.value)}
                   value={type}
                 >
-                  <option key="(select one)" value="(select one)">
+                  <option key="(select one)" value="">
                     (select one)
                   </option>
                   <option key="Online" value="Online">Online</option>
@@ -234,7 +239,7 @@ function GroupeCreate() {
                   onChange={(e) => setIsPrivate(e.target.value)}
                   value={isPrivate}
                 >
-                  <option value="(select one)">
+                  <option key="(select one)" value="">
                     (select one)
                   </option>
                   <option key="Private" value={true}>Private</option>

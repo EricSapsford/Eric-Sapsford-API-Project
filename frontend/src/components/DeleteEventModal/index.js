@@ -12,12 +12,31 @@ function DeleteEventModal({ eventId }) {
   const { closeModal } = useModal();
   const [errors, setErrors] = useState({});
 
+  // const deleteIt = (e) => {
+  //   e.preventDefault();
+  //   setErrors({});
+  //   dispatch(eventActions.deleteEventThunk(eventId))
+  //   return dispatch(eventActions.getAllEventsThunk())
+  //     .then(closeModal)
+  //     .then(() => {
+  //       history.push("/events")
+  //     })
+  //     .catch(async (res) => {
+  //       const data = await res.json()
+  //       if (data && data.errors) {
+  //         setErrors(data.errors);
+  //         console.log("you got errors son", data)
+  //       }
+  //     });
+  // };
+
   const deleteIt = (e) => {
     e.preventDefault();
     setErrors({});
     return dispatch(eventActions.deleteEventThunk(eventId))
       .then(closeModal)
       .then(() => {
+        dispatch(eventActions.getAllEventsThunk())
         history.push("/events")
       })
       .catch(async (res) => {
@@ -27,7 +46,7 @@ function DeleteEventModal({ eventId }) {
           console.log("you got errors son", data)
         }
       });
-  };
+  }
 
   return (
     <>

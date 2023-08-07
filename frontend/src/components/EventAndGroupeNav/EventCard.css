@@ -22,10 +22,10 @@
   border-radius: 3em;
 }
 
-/* .EGWhyOverDiv:hover {
+.EGWhyOverDiv:hover {
   background-color: lightgray;
-  border-radius: 3em;
-} */
+  border-radius: 2em;
+}
 
 .Cimage {
   width: 300px;

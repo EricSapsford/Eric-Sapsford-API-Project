@@ -34,4 +34,10 @@
   background-color: lightcoral;
   box-shadow: 3px 3px black;
   border: 2px solid black;
+  cursor: pointer;
+}
+
+.actualSubmitButton:active {
+  box-shadow: none;
+  background-color: red;
 }

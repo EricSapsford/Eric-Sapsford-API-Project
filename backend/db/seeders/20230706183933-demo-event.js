@@ -31,7 +31,7 @@ module.exports = {
         venueId: 2,
         groupId: 2,
         name: "Julliet and Rachel's Wedding",
-        description: "Security's gon be tough on this one all, but our numbers have swelled and I'm confident we'll be able to overwelm security long enough to raid the catering tent. Food's set to hit the table at exactly 4:00 PM. If you're not outside the venue in your boxing gloves and running shoes by 3:55 you don't get a cut of the cake.",
+        description: "Security's gon be tough on this one all, but our numbers have swelled and I'm confident we'll be able to overwelm them long enough to raid the catering tent. Food's set to hit the table at exactly 4:00 PM. If you're not outside the venue in your boxing gloves and running shoes by 3:55 you don't get a cut of the cake.",
         type: "In person",
         //==============
         private: true,

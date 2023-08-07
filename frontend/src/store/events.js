@@ -196,7 +196,7 @@ const eventReducer = (state = initialState, action) => {
 
     case GET_ALL_EVENTS: {
       // const newState = { ...state, allEvents: {} }
-      const newState = { ...state }
+      const newState = { ...state, allEvents: {} }
       // console.log(action)
       // console.log(state)
       action.events.forEach((eventObj) => {

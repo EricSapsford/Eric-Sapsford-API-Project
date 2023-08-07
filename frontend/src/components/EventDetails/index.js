@@ -167,8 +167,8 @@ function EventDetails() {
             </div>
 
             <div className="EDrightCards">
-              <div className="EDgroupCard">
-                <NavLink className="EDnavLink" to={`/groups/${groupeId}`} style={{ textDecoration: "none" }}>
+              <NavLink className="EDnavLink" to={`/groups/${groupeId}`} style={{ textDecoration: "none" }}>
+                <div className="EDgroupCard">
                   <div className="groupeDetes">
                     {/* <div className="EDgroupeImage"> */}
                     {groupeImg ? <img className="EDgroupImg" src={groupeImg}></img> : <img className="img" src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"></img>}
@@ -179,8 +179,8 @@ function EventDetails() {
                       </div>
                     </div>
                   </div>
-                </NavLink>
-              </div>
+                </div>
+              </NavLink>
 
 
               <div className=" EDrightLowerCard">

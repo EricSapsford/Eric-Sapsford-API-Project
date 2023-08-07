@@ -11,6 +11,11 @@
   cursor: pointer;
 }
 
+.profileButton:active {
+  box-shadow: none;
+  background-color: red;
+}
+
 #dropdownDiv {
   position: absolute;
   background-color: darkslategray;
@@ -34,4 +39,9 @@
   border: 2px solid black;
   margin-right: 10px;
   cursor: pointer;
+}
+
+.riggleButton:active {
+  box-shadow: none;
+  background-color: red;
 }

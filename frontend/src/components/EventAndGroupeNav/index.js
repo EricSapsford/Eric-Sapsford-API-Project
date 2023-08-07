@@ -17,9 +17,9 @@ function EventAndGroupeNav() {
   useEffect(() => {
     dispatch(eventActions.getAllEventsThunk())
   }, [dispatch])
-  useEffect(() => {
-    dispatch(eventActions.getOneEventThunk(3))
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(eventActions.getOneEventThunk(3))
+  // }, [dispatch])
 
   // const getAll = (e) => {
   //   e.preventDefault();

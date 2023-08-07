@@ -21,6 +21,16 @@
   background-color: lightcoral;
 }
 
+.redButton:active {
+  box-shadow: none;
+  background-color: red;
+}
+
+.greyButton:active {
+  box-shadow: none;
+  background-color: darkslategray;
+}
+
 .DMmessage {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   margin-bottom: 5px;

@@ -26,6 +26,7 @@ function DeleteGroupeModal({ groupId }) {
     return dispatch(groupeActions.deleteGroupeThunk(groupId))
       .then(closeModal)
       .then(() => {
+        dispatch(groupeActions.getAllGroupesThunk())
         history.push("/groups")
       })
       .catch(async (res) => {

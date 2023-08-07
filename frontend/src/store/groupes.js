@@ -262,7 +262,7 @@ const groupeReducer = (state = initialState, action) => {
 
     case GET_ALL_GROUPES: {
       // const newState = { ...state, allGroups: {} }
-      const newState = { ...state }
+      const newState = { ...state, allGroups: {} }
       // console.log(action)
       // console.log(state)
       action.groupes.forEach((groupeObj) => {
@@ -292,7 +292,7 @@ const groupeReducer = (state = initialState, action) => {
     // }
 
     case DELETE_GROUPE: {
-      const newState = { ...state, allGroups: {} }
+      const newState = { ...state }
       // console.log("hellof from delete reducer, newstate:", newState)
       delete newState.allGroups[action.groupeId]
       return newState;
