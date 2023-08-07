@@ -17,7 +17,7 @@ function GeventCard({ event, city, state }) {
     <div className="OOverDiv">
       <div className="SoManyDiv">
         <NavLink to={`/events/${event.id}`} style={{ textDecoration: "none", color: "brown", }}>
-          <div className="WhyOverDiv">
+          <div className="EGWhyOverDiv">
             <div className="CardOverDiv">
               <div className="CimageDiv">
                 <img className="Cimage" src={previewImage ? previewImage : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"} alt="Event Image" />
