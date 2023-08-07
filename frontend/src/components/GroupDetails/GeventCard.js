@@ -13,6 +13,8 @@ function GeventCard({ event, city, state }) {
   let timeRaw = startDateRaw.slice(11, 16)
   let previewImage = event.EventImages[0].url
 
+
+
   return (
     <div className="OOverDiv">
       <div className="SoManyDiv">

@@ -169,7 +169,7 @@ function GroupDetails() {
           <div className="GDabout">What we're about</div>
           <div className="actualGDabout">{groupe.about}</div>
           <div>
-            <h2 style={{ color: "brown" }}>Upcoming Events · {upcomingArr.length}</h2>
+            {upcomingArr.length ? <h2 style={{ color: "brown" }}>Upcoming Events · {upcomingArr.length}</h2> : null}
             {upcomingArr.map((event) => (
               <div key={event.id}>
                 <GeventCard event={event} city={groupe.city} state={groupe.state} />
@@ -178,7 +178,7 @@ function GroupDetails() {
 
           </div>
           <div>
-            <h2 style={{ color: "brown" }}>Past Events · {pastArr.length}</h2>
+            {pastArr.length ? <h2 style={{ color: "brown" }}>Past Events · {pastArr.length}</h2> : null}
             {pastArr.map((event) => (
               <div key={event.id}>
                 <GeventCard event={event} city={groupe.city} state={groupe.state} />

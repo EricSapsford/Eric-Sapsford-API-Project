@@ -16,9 +16,9 @@ module.exports = {
       {
         venueId: 1,
         groupId: 1,
-        name: "Event1",
-        description: "Description of Event1",
-        type: "Online",
+        name: "Thanksgiving Dinner at George's house.",
+        description: "This is it folks, the event of the season. No one knows why he now holds his Thanksgiving in January, but if there's one thing we DO know it's that George and his family always love how we show up unanounced every year and just invite ourselves to one of the best spreads this side of the Illinois.",
+        type: "In person",
         //==============
         private: false,
         //==============
@@ -30,9 +30,9 @@ module.exports = {
       {
         venueId: 2,
         groupId: 2,
-        name: "Event2",
-        description: "Description of Event2",
-        type: "Online",
+        name: "Julliet and Rachel's Wedding",
+        description: "Security's gon be tough on this one all, but our numbers have swelled and I'm confident we'll be able to overwelm security long enough to raid the catering tent. Food's set to hit the table at exactly 4:00 PM. If you're not outside the venue in your boxing gloves and running shoes by 3:55 you don't get a cut of the cake.",
+        type: "In person",
         //==============
         private: true,
         //==============
@@ -44,8 +44,8 @@ module.exports = {
       {
         venueId: 3,
         groupId: 3,
-        name: "Event3",
-        description: "Description of Event3",
+        name: "Oreos under the 18",
+        description: "Found a whole palet of cookies being thrown out behind a Wal-mart. I got most of them before they were carted off to the dump, so if you wanna enter a sugar coma with me meet me under the 18 before supplies are gone.",
         type: "In person",
         //==============
         private: false,

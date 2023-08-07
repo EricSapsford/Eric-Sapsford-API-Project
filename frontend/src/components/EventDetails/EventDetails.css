@@ -54,7 +54,8 @@
 .EDnavLink,
 .EDstartEndWords,
 .EDpriceWords,
-.EDtypeWords,
+.EDtypeWordsOnline,
+.EDtypeWordsInPerson,
 .EDabout,
 .EDheader {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -115,14 +116,23 @@
   margin-top: 3px;
 }
 
-.EDtypeIcon {
+.EDtypeIconOnline {
   margin-right: 10px;
   margin-top: 8px;
 }
 
-.EDtypeWords {
+.EDtypeIconInPerson {
+  margin-top: 20px;
+}
+
+.EDtypeWordsOnline {
   margin-top: 6px;
   margin-right: 10px;
+}
+
+.EDtypeWordsInPerson {
+  margin-top: 6px;
+  margin-left: 20px;
 }
 
 .EDCRUDdiv {

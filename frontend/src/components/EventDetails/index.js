@@ -94,6 +94,9 @@ function EventDetails() {
     }
   }
 
+  const EDtypeIcon = event.type === "Online" ? "EDtypeIconOnline" : "EDtypeIconInPerson"
+  const EDtypeWords = event.type === "Online" ? "EDtypeWordsOnline" : "EDtypeWordsInPerson"
+
 
   // // let anotherImgArr;
   // // if (groupeImgArr.length) {
@@ -138,9 +141,9 @@ function EventDetails() {
   let startDateRaw = event.startDate
   let endDateRaw = event.endDate
   let startDate = startDateRaw.slice(0, 10)
-  let startTimeRaw = startDateRaw.slice(11, 22)
+  let startTimeRaw = startDateRaw.slice(11, 16)
   let endDate = endDateRaw.slice(0, 10)
-  let endTimeRaw = endDateRaw.slice(11, 22)
+  let endTimeRaw = endDateRaw.slice(11, 16)
 
 
   return (
@@ -213,10 +216,10 @@ function EventDetails() {
 
                 {/* type */}
                 <div className="EDtypeButtons">
-                  <div className="EDtypeIcon">
+                  <div className={EDtypeIcon}>
                     {event.type === "Online" ? <i class="fa-solid fa-wifi"></i> : <i class="fa-solid fa-person"></i>}
                   </div>
-                  <div className="EDtypeWords">
+                  <div className={EDtypeWords}>
                     {event.type}
                   </div>
                   {/* <div className="Location">{groupe.city}, {groupe.state}</div> */}
