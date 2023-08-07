@@ -34,7 +34,7 @@ module.exports = {
       {
         organizerId: 3,
         name: "Metropolis Munchers",
-        about: "It's a busy world out there and sometimes all you've got time for is a snack under you local overpass. We're you're best resource for all the best overpases and juiciest dumpsters in the Milwaukee area.",
+        about: "It's a busy world out there and sometimes all you've got time for is a snack under you local overpass. We're your best resource for all the best overpases and juiciest dumpsters in the Milwaukee area.",
         type: "In person",
         private: true,
         city: "Milwaukee",
