@@ -109,8 +109,9 @@ export const getOneEventThunk = (eventId) => async (dispatch) => {
 }
 
 export const createEventThunk = (myCreatedEvent) => async (dispatch) => {
-  const { venueId, name, type, capacity, isPrivate, price, description, startDate, endDate, url, groupeId } = myCreatedEvent
-  const res = await csrfFetch(`/api/groups/${groupeId}/events`, {
+  const { venueId, name, type, capacity, isPrivate, price, description, startDate, endDate, url, groupId } = myCreatedEvent
+  console.log("inside create event thunk, event", myCreatedEvent)
+  const res = await csrfFetch(`/api/groups/${groupId}/events`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -157,6 +158,7 @@ export const createEventThunk = (myCreatedEvent) => async (dispatch) => {
     }
     return data;
   } else {
+    console.log("thunk create else")
     const errors = await res.json();
     return errors
   }

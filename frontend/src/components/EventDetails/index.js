@@ -39,7 +39,7 @@ function EventDetails() {
   // console.log(group)
   // const groupeImg = "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
   const groupeImgArr = useSelector(state => state.events.singleEvent.Group.images)
-  console.log(groupeImgArr)
+  // console.log(groupeImgArr)
   const groupeImg = groupeImgArr[0].url
   // console.log(groupeImg)
 

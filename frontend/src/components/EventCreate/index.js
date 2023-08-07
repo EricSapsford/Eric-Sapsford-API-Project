@@ -11,7 +11,7 @@ function EventCreate() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { groupId } = useParams();
-  // console.log("groupid", groupId)
+  console.log("groupId", groupId)
 
   useEffect(() => {
     dispatch(groupActions.getAllGroupesThunk())
@@ -85,7 +85,7 @@ function EventCreate() {
       endDate,
       url,
       description,
-      groupId
+      groupId: parseInt(groupId)
     }
 
     console.log(event);

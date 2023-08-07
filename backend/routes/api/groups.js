@@ -426,7 +426,16 @@ router.get("/:groupId", async (req, res) => {
     include: [
       { model: Membership },
       { model: User },
-      { model: Event }
+      {
+        model: Event,
+        include: [
+          { model: EventImage }
+        ]
+        // attributes: [
+        //   "startDate",
+        //   "endDate"
+        // ]
+      }
     ]
   })
 
@@ -491,7 +500,8 @@ router.get("/:groupId", async (req, res) => {
     numEvents: groupe.dataValues.Events.length,
     GroupImages: groupImages,
     Organizer: organObj,
-    Venues: venues
+    Venues: venues,
+    Events: groupe.dataValues.Events
   }
 
   res.status(200);

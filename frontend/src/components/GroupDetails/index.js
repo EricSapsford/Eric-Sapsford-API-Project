@@ -5,6 +5,8 @@ import * as groupeActions from "../../store/groupes";
 import OpenModalButton from "../OpenModalButton";
 import "./GroupDetails.css"
 import DeleteGroupeModal from "../DeleteGroupeModal";
+import EventCard from "../EventAndGroupeNav/EventCard";
+import GeventCard from "./GeventCard";
 
 function GroupDetails() {
 
@@ -24,6 +26,32 @@ function GroupDetails() {
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   const groupe = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   const groupeImageArr = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []);
+  const eventsArr = useSelector(state => state.groups.singleGroup.Events ? state.groups.singleGroup.Events : [])
+  // console.log("eventsArr", eventsArr)
+
+  //------------------------------------ DATE -------------------------------------
+  //------------------------------------ DATE -------------------------------------
+  //------------------------------------ DATE -------------------------------------
+  //------------------------------------ DATE -------------------------------------
+
+  const date = new Date();
+  const dateTrans = date.toISOString()
+  // console.log("date", dateTrans)
+  let upcomingArr = [];
+  let pastArr = [];
+
+  for (let i = 0; i < eventsArr.length; i++) {
+    // console.log(eventsArr[i].startDate, `${dateTrans}`)
+    // console.log(eventsArr[i].startDate < `${dateTrans}`)
+    if (eventsArr[i].startDate < `${dateTrans}`) {
+      pastArr.push(eventsArr[i])
+    } else {
+      upcomingArr.push(eventsArr[i])
+    }
+  }
+
+  console.log("upcoming", upcomingArr, "past", pastArr)
+
 
   //------------------------------------ IMAGE ------------------------------------
   //------------------------------------ IMAGE ------------------------------------
@@ -140,8 +168,24 @@ function GroupDetails() {
           <div className="actualGDorgan">{organFirst} {organLast}</div>
           <div className="GDabout">What we're about</div>
           <div className="actualGDabout">{groupe.about}</div>
-          <div>Upcoming Events (#)</div>
-          <div> Past Events (#)</div>
+          <div>
+            <h2 style={{ color: "brown" }}>Upcoming Events · {upcomingArr.length}</h2>
+            {upcomingArr.map((event) => (
+              <div key={event.id}>
+                <GeventCard event={event} city={groupe.city} state={groupe.state} />
+              </div>
+            ))}
+
+          </div>
+          <div>
+            <h2 style={{ color: "brown" }}>Past Events · {pastArr.length}</h2>
+            {pastArr.map((event) => (
+              <div key={event.id}>
+                <GeventCard event={event} city={groupe.city} state={groupe.state} />
+              </div>
+            ))}
+
+          </div>
         </div>
       </div>
     </>
