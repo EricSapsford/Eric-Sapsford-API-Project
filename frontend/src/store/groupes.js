@@ -119,7 +119,9 @@ export const createGroupeThunk = (myCreatedGroupe) => async (dispatch) => {
     //nested image logic, THANK YOU SHERRY!
     const groupeId = data.id
     const preview = true;
-    const imgRes = await csrfFetch(`/api/groups/${groupeId + 1}/images`, {
+    //===================================
+    const imgRes = await csrfFetch(`/api/groups/${groupeId}/images`, {
+      //===================================
       // I DON'T KNOW WHY, I DON'T KNOW HOW, BUT IF YOU TAKE ^ THIS OUT, EVERYTHING BREAKS.
       // I DO KNOW WHY NOW, AND IT STILL NEEDS TO BE THERE
       method: "POST",

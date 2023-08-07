@@ -135,7 +135,9 @@ export const createEventThunk = (myCreatedEvent) => async (dispatch) => {
 
     const eventId = data.id
     const preview = true;
-    const imgRes = await csrfFetch(`/api/events/${eventId + 1}/images`, {
+    //===============================
+    const imgRes = await csrfFetch(`/api/events/${eventId}/images`, {
+      //=============================
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

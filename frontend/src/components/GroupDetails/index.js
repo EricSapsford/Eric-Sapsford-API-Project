@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import * as groupeActions from "../../store/groupes";
+import * as eventActions from "../../store/events";
 import OpenModalButton from "../OpenModalButton";
 import "./GroupDetails.css"
 import DeleteGroupeModal from "../DeleteGroupeModal";
@@ -21,6 +22,10 @@ function GroupDetails() {
   useEffect(() => {
     dispatch(groupeActions.getAllGroupesThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(eventActions.getOneEventThunk(3))
+  })
 
   const sessionUser = useSelector(state => state.session.user ? state.session.user : {});
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});

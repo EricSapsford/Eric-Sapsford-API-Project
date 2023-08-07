@@ -77,7 +77,9 @@ function GroupeCreate() {
         //--------- ^^^ don't need this my ass
         console.log("thunk try", res)
         if (res.id) {
-          history.push(`/groups/${res.id + 1}`);
+          //===============================
+          history.push(`/groups/${res.id}`);
+          //===============================
           // IF YOU EVEN THINK OF REMOVING ^ THIS EVERYTHING BREAKS, DON'T TOUCH IT
           // BUT ALSO PROBABLY DON'T REPLICATE IT. IT SHOULDN'T WORK. IT JUST DOES
           // I KNOW WHY THIS WORKS AND IT DOES NEED TO BE THERE

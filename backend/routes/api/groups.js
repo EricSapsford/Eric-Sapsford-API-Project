@@ -1349,9 +1349,12 @@ router.post("/:groupId/events", requireAuth, validateEvent, async (req, res) => 
   const dirtyEvent = await Event.findOne({
     order: [['id', 'DESC']],
   });
-  const dirtyEventIdInc = dirtyEvent.dataValues.id++;
+  const dirtyEventIdInc = 1 + dirtyEvent.dataValues.id;
 
   await Event.bulkCreate([{
+    //====================
+    id: dirtyEventIdInc,
+    //====================
     groupId,
     venueId,
     name,
@@ -1618,11 +1621,15 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
   const dirtyGroup = await Groupe.findOne({
     order: [['id', 'DESC']],
   });
-  const dirtyGroupIdInc = dirtyGroup.dataValues.id++;
+  const dirtyGroupIdInc = 1 + dirtyGroup.dataValues.id;
+  console.log("dirtyGroupIdInc", dirtyGroupIdInc)
 
 
   //let newGroup = //well look who doesn't need to exist?
   await Groupe.bulkCreate([{
+    //=====================
+    id: dirtyGroupIdInc,
+    //=====================
     organizerId,
     name,
     about,
@@ -1653,7 +1660,7 @@ router.post("/", requireAuth, validateGroupe, async (req, res) => {
 
   await Membership.bulkCreate([{
     userId: organizerId,
-    groupId: dirtyGroupIdInc,
+    groupId: foundGroupeId,
     status: "host",
   },
   ], { validate: true })
