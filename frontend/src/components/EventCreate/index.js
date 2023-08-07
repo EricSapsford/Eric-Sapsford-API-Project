@@ -108,16 +108,10 @@ function EventCreate() {
 
     try {
       const res = await dispatch(eventActions.createEventThunk(event));
+      await dispatch(eventActions.getAllEventsThunk())
       console.log("thunk try", res)
       if (res.id) {
-        const dodgeThis = async () => {
-          await Promise.all([
-            dispatch(eventActions.getOneEventThunk(3)),
-            // history.push(`/groups`),
-            history.push(`/events/${res.id + 1}`)
-          ])
-        }
-        dodgeThis();
+        history.push(`/events/${res.id + 1}`)
       } else {
         return res;
       }
